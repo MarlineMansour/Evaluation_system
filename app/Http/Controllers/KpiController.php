@@ -27,6 +27,7 @@ return view('manager.kpis.index',compact('positions'));
         $authUser=Auth::id();
         $positionKPIs = PositionKPI::where('position_id', $request->id)
             ->with('KPIs')
+            ->groupBy('kpi_id','position_id')
             ->get()
             ->map(function ($pk) use ($authUser) {
             if ($pk->created_by != $authUser) {
@@ -42,11 +43,52 @@ return view('manager.kpis.index',compact('positions'));
     }
 
     public function storePositionKpi(Request $request){
-  dd($request);
-    PositionKPI::create($request);
 
-    return redirect()->route('list_kpis');
+       $validated = $request->validate([
+    'kpi_id.*' => 'required|exists:kpis,id',
+    'position_id.*' => 'required|exists:positions,id',
+    'target.*' => 'required|numeric',
+    'weight.*' => 'required|numeric',
+]);
+
+for ($i = 0; $i < count($validated['kpi_id']); $i++) {
+    // Skip incomplete rows
+    if (
+        !isset($validated['kpi_id'][$i]) ||
+        !isset($validated['position_id'][$i]) ||
+        !isset($validated['target'][$i]) ||
+        !isset($validated['weight'][$i])
+    ) {
+        continue;
     }
 
+    $positionId = $validated['position_id'][$i];
+    $kpiId = $validated['kpi_id'][$i];
+
+    $existingKpi = PositionKPI::where('position_id', $positionId)
+        ->where('kpi_id', $kpiId)
+        ->where('created_by', Auth::id())
+        ->first();
+
+    if ($existingKpi) {
+        $existingKpi->update([
+            'target' => $validated['target'][$i],
+            'weight' => $validated['weight'][$i],
+            'updated_by' => Auth::id(),
+        ]);
+    } else {
+        PositionKPI::create([
+            'position_id' => $positionId,
+            'kpi_id' => $kpiId,
+            'target' => $validated['target'][$i],
+            'weight' => $validated['weight'][$i],
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
+        ]);
+    }
 }
 
+return redirect()->route('kpis')->with('success', 'KPIs saved successfully!');
+
+    }
+}   

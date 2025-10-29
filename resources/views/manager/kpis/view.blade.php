@@ -16,14 +16,14 @@
             <td>{{$pk->id}}</td>
             <td>{{$pk->KPIs->name_en}}</td>
             <td>{{$pk->KPIs->baseline}}</td>
-            <input hidden name="kpi_id" value="{{$pk->kpi_id}}">
-            <input hidden name="position_id" value="{{$pk->position_id}}">
+            <input hidden name="kpi_id[]" value="{{$pk->kpi_id}}">
+            <input hidden name="position_id[]" value="{{$pk->position_id}}">
 
                 <td>
-                    <input type="number" placeholder="enter target" min="0" name="target"  value="{{$pk->target}}" class="form-control">
+                    <input type="number" placeholder="enter target" min="0" name="target[]"  value="{{$pk->target}}" class="form-control">
                 </td>
                 <td>
-                    <input type="number"  step="0.01" placeholder="enter weight" min="00.00" max="100.00" name="weight" value="{{$pk->weight}}" class=" weight form-control">
+                    <input type="number"  step="0.01" placeholder="enter weight" min="00.00" max="100.00" name="weight[]" value="{{$pk->weight}}" class=" weight form-control">
                 </td>
         </tr>
     @empty

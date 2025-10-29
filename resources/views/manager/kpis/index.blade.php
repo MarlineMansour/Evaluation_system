@@ -1,11 +1,15 @@
 @extends('layout.master')
-@section('title', ' employees')
+@section('title', ' KPIs')
 
 @section('content')
     <div class="card container">
 
         <!-- Modal -->
-
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                <div class="row-cols-6">
