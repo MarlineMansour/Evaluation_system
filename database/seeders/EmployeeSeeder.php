@@ -15,9 +15,9 @@ class EmployeeSeeder extends Seeder
     {
         Employee::insert([
             [
-                'name_en' => 'Ahmed Ali',
-                'name_ar' => 'أحمد علي',
-                'start_date' => '2022-01-10',
+                'name_en' => 'Marline Mansour',
+                'name_ar' => 'مارلين منصور',
+                'start_date' => '2025-1-1',
                 'position_id' => 1,
                 'user_id' => 1,
                 'manager_id' => 1,

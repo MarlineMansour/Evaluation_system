@@ -15,23 +15,43 @@ class PositionSeeder extends Seeder
     {
         Position::insert([
             [
-                'name_en' => 'HR Manager',
-                'name_ar' => 'مدير الموارد البشرية',
-                'type' => 'Competencies only',
+                'name_en' => 'IT Manager',
+                'name_ar' => 'مدير تقنية المعلومات',
+                'type' => 'KPIs & Competencies',
                 'is_active' => 1,
-                'department_id' => 1,
+                'department_id' =>2,
                 'created_by' => 1,
                 'updated_by' => 1,
             ],
+//            [
+//                'name_en' => 'Software Engineer',
+//                'name_ar' => 'مهندس برمجيات',
+//                'type' => 'KPIs & Competencies',
+//                'is_active' => 1,
+//                'department_id' => 2,
+//                'created_by' => 1,
+//                'updated_by' => 1,
+//            ],
             [
-                'name_en' => 'Software Engineer',
-                'name_ar' => 'مهندس برمجيات',
+                'name_en' => 'Web Developer',
+                'name_ar' => 'مطور مواقع إلكترونية',
                 'type' => 'KPIs & Competencies',
                 'is_active' => 1,
                 'department_id' => 2,
                 'created_by' => 1,
                 'updated_by' => 1,
             ],
+            [
+                'name_en' => 'IT System Admin',
+                'name_ar' => 'مسؤول نظام تقنية المعلومات',
+                'type' => 'KPIs & Competencies',
+                'is_active' => 1,
+                'department_id' => 2,
+                'created_by' => 1,
+                'updated_by' => 1,
+            ],
+
+
         ]);
     }
 }

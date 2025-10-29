@@ -11,7 +11,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +22,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-          'username'=> 'bail|required|min:3',
-            'password'=> 'bail|required|min:8',
+          'username'=> 'bail|required',
+            'password'=> 'bail|required',
         ];
     }
     public function messages()

@@ -19,23 +19,23 @@ class Department extends Model
     ];
 
     public function createdBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
     public function updatedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
     public function deletedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function hasCompetencies(){
         return $this->hasMany(Competency::class);
     }
-    public function hasPosition(){
+    public function hasPositions(){
         return $this->hasMany(Position::class);
     }
     public function hasManager(){
-        return $this->belongTo(Employee::class);
+        return $this->belongsTo(Employee::class);
     }
 
 }

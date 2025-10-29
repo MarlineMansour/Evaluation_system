@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('name_en');
             $table->string('name_ar');
-            $table->enum('type',[' KPIs & Competencies', 'Competencies only', 'No KPIs & Competencies']);
+            $table->enum('type',['KPIs & Competencies', 'Competencies only', 'No KPIs & Competencies']);
 
             $table->boolean('is_active');
             // 0 ->false , 1 ->true

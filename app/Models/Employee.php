@@ -29,17 +29,23 @@ class Employee extends Model
     ];
 
     public function createdBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
     public function updatedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
     public function deletedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function manager(){
-        return $this->belongTo(Employee::class);
+        return $this->belongsTo(Employee::class);
+    }
+    public function department(){
+        return $this->belongsTo(Department::class);
+    }
+    public function position(){
+        return $this->belongsTo(Position::class);
     }
 
 

@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 class HomeController extends Controller
 {
- public function hone(){
+ public function home(){
      return view('home.home');
  }
 }

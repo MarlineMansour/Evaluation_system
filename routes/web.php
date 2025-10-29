@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[HomeController::class,'home'])->name('home');
-Route::get('/login',[AuthController::class ,' login'])->name('login');
+
+Route::get('/login',[AuthController::class,'login'])->name('login');
+Route::post('/login_User',[AuthController::class ,'loginUser'])->name('login_User');
+
+Route::middleware('auth')->group(function(){
+    Route::get('logout',[AuthController::class,'logout'])->name('logout');
+});
+    Route::get('/employees',[AdminController::class,'getEmployees'])->name('employees');
+    Route::get('/evaluate',[AdminController::class,'evaluate'])->name('evaluate');
+    Route::match(['get', 'post'],'/kpis',[AdminController::class, 'getKPIs'])->name('kpis');
+
+
 
 
