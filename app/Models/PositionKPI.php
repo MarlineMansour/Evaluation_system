@@ -32,8 +32,8 @@ class PositionKPI extends Model
     public function deletedBy(){
         return $this->belongsTo(User::class);
     }
-    public function hasKPIs(){
-        return $this->hasMany(Kpi::class);
+    public function KPIs(){
+        return $this->belongsTo(Kpi::class, 'kpi_id');
     }
 
 }
