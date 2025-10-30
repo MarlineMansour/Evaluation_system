@@ -11,26 +11,28 @@
     </tr>
     </thead>
     <tbody >
-    @forelse($positionKPIs as $pk)
+    @forelse($merged as $pk)
         <tr>
-            <td>{{$pk->id}}</td>
-            <td>{{$pk->KPIs->name_en}}</td>
-            <td>{{$pk->KPIs->baseline}}</td>
-            <input hidden name="kpi_id" value="{{$pk->kpi_id}}">
-            <input hidden name="position_id" value="{{$pk->position_id}}">
+            <td>{{ $pk->kpi_id }}</td>
+            <td>{{ $pk->KPIs->name_en ?? '—' }}</td>
+            <td>{{ $pk->KPIs->baseline ?? '—' }}</td>
 
-                <td>
-                    <input type="number" placeholder="enter target" min="0" name="target"  value="{{$pk->target}}" class="form-control">
-                </td>
-                <td>
-                    <input type="number"  step="0.01" placeholder="enter weight" min="00.00" max="100.00" name="weight" value="{{$pk->weight}}" class=" weight form-control">
-                </td>
+            <input type="hidden" name="kpi_id[]" value="{{ $pk->kpi_id }}">
+            <input type="hidden" name="position_id[]" value="{{ $pk->position_id }}">
+
+            <td>
+                <input type="number" name="target[]" placeholder="Enter target" value="{{ $pk->target }}" class="form-control">
+            </td>
+            <td>
+                <input type="number" name="weight[]" step="0.01" placeholder="Enter weight" value="{{ $pk->weight }}" class="form-control weight">
+            </td>
         </tr>
     @empty
         <tr>
-            <td colspan="6">No KPIs found for this position.</td>
+            <td colspan="5" class="text-center">No KPIs assigned to this position</td>
         </tr>
     @endforelse
+
     </tbody>
 </table>
 <div class="mt-3">

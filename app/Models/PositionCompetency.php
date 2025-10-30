@@ -21,14 +21,14 @@ class PositionCompetency extends Model
 
     ];
     public function createdBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function updatedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function deletedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

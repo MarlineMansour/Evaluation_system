@@ -2,10 +2,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Competency extends Model
 {
-
+use SoftDeletes;
     protected $fillable = [
         'name_en',
         'name_ar',
@@ -17,18 +18,18 @@ class Competency extends Model
     ];
 
     public function createdBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function updatedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function deletedBy(){
-        return $this->belongTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function relatedToDepartment(){
-        return $this->belongTo(Department::class);
+        return $this->belongsTo(Department::class,'department_id');
      }
 }

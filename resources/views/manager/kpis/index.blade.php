@@ -1,11 +1,15 @@
 @extends('layout.master')
-@section('title', ' employees')
+@section('title', 'KPIs')
 
 @section('content')
     <div class="card container">
 
         <!-- Modal -->
-
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                <div class="row-cols-6">
@@ -37,12 +41,15 @@
                             </table>
                         </div>
 
-                    <div>
+                        <div class="row-cols-8">
+                        <div class="col-4 my-4">
+                            <button type="submit" id="submit_later" class="btn btn-outline-dark"> Submit For Later</button>
+                        </div>
 
-                            <button type="submit" id="save_btn" class="btn btn-outline-dark">Save</button>
-
-
-                    </div>
+                        <div class="col-4 my-4">
+                            <button type="submit" id="final_submit" class="btn btn-outline-dark">Final Sbmit</button>
+                        </div>
+                        </div>
                 </form>
                 </div>
             </div>
@@ -56,6 +63,7 @@
 
 
     <script>
+
         $(document).ready(function(){
             $('.positions').on('change', function(){
                 var position_id = $(this).val();
@@ -81,6 +89,7 @@
             });
             function calculateTotalWeights(){
                 let total=0;
+
                 $('.weight').each(function() {
                     let maxAllowed = 100 - total;
 
@@ -97,27 +106,20 @@
                      $('#totalWeight').html(total.toFixed(2));
                     });
 
-                   // if (total !== 100) {
-                   //     $('#kpi_form').on('submit', function(e){
-                   //         e.preventDefault();
-                   //     });
-                   // }
-
-                    // Optional: alert if total exceeds 100
                     if (total > 100) {
                         alert('Total weight must not exceed 100');
                     }
 
             }
-            // Bind submit handler once
-            $('#kpi_form').on('submit', function(e) {
+
+            $('#final_submit').on('click', function(e) {
                 let total = 0;
                 $('.weight').each(function() {
                     total += parseFloat($(this).val()) || 0;
                 });
 
                 if (total !== 100) {
-                    e.preventDefault(); // stop submission
+                    e.preventDefault();
                     alert('Total weight must be exactly 100 to submit.');
                 }
             });
@@ -127,6 +129,8 @@
             });
 
         });
+
+
     </script>
 @endsection
 
