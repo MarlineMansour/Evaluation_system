@@ -9,9 +9,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Evaluation extends Model
 {
     use HasFactory, SoftDeletes;
-
+    protected $table= 'evaluation';
     protected $fillable = [
         'employee_id',
+        'manager_id',
+        'position_id',
         'kpis_score',
         'competencies_score',
         'total_score',

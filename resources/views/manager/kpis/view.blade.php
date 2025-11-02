@@ -1,7 +1,7 @@
 
 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
     <thead>
-    <tr>
+    <tr >
         <th>ID</th>
         <th>Name_en</th>
         <th>Baseline</th>
@@ -19,12 +19,11 @@
 
             <input type="hidden" name="kpi_id[]" value="{{ $pk->kpi_id }}">
             <input type="hidden" name="position_id[]" value="{{ $pk->position_id }}">
-
             <td>
-                <input type="number" name="target[]" placeholder="Enter target" value="{{ $pk->target }}" class="form-control">
+                <input type="number" name="target[]" placeholder="Enter target" value="{{ $pk->target }}" class="form-control target" >
             </td>
             <td>
-                <input type="number" name="weight[]" step="0.01" placeholder="Enter weight" value="{{ $pk->weight }}" class="form-control weight">
+                <input type="number" name="weight[]" step="0.01" placeholder="Enter weight" value="{{ $pk->weight }}" class="form-control weight" >
             </td>
         </tr>
     @empty

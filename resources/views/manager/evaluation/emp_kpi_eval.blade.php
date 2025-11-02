@@ -13,20 +13,19 @@
     </thead>
 
     <tbody>
-    @forelse()
+    @forelse($Kpi_eval as $eval)
         <tr>
-            <td>{{  }}</td>
-            <td>{{  }}</td>
-            <td>{{  }}</td>
+            <td>{{ $eval->KPIs->id }}</td>
+            <td>{{ $eval->KPIs->name_en }}</td>
+            <td>{{ $eval->target }}</td>
 
-            <input type="hidden" name="kpi_id[]" value="{{  }}">
-            <input type="hidden" name="position_id[]" value="{{  }}">
+
 
             <td>
-                <input type="number" name="target[]" placeholder="Enter target" value="{{  }}" class="form-control">
+                <input type="number" name="score[]" placeholder="Enter Score" value="{{ $eval->score}}" class="form-control">
             </td>
             <td>
-                <input type="number" name="weight[]" step="0.01" placeholder="Enter weight" value="{{  }}" class="form-control weight">
+                <input type="number" name="weighted_score[]" step="0.01" value="{{ $eval->weighted_score }}" class="form-control">
             </td>
         </tr>
     @empty

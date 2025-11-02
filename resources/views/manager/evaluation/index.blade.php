@@ -8,7 +8,7 @@
           <div class="card-header py-3">
             <div class="row-cols-6">
 
-                <select class="employees form-control p-2">
+             <select class="employees form-control p-2">
                     <option value="" selected disabled>Choose Employee</option>
                     @foreach($employees as $employee)
                         <option value="{{ $employee->id }}">{{ $employee->name_en }}</option>
@@ -27,7 +27,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-{{--                    <form  id="kpi_form" action="{{route('store_employee_kpi_evaluation')}}" method="Post">--}}
+{{--                    <form  id="kpi_form">--}}
 {{--                        @csrf--}}
                         <div id="employeeKpisEval">
                             <table class="table table-bordered" id="dataTable">
@@ -65,8 +65,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-{{--                    <form  id="kpi_form" action="{{route('store_employee_competencies_evaluation')}}" method="Post">--}}
-{{--                        @csrf--}}
+{{--                    <form  id="kpi_form">--}}
+
                         <div id="employeeCompetenciesEval">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
@@ -100,8 +100,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-{{--                    <form  id="kpi_form" action="{{route('store_employee_evaluation')}}" method="Post">--}}
-{{--                        @csrf--}}
+{{--                    <form  id="kpi_form" >--}}
+
                         <div id="employeeEval">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
@@ -117,10 +117,7 @@
                         </div>
 
                         <div>
-
                             <button type="submit" id="save_3" class="btn btn-outline-dark">Save</button>
-
-
                         </div>
 {{--                    </form>--}}
                 </div>
@@ -139,7 +136,7 @@
                 $('#dataTable').remove();
                $.ajax({
                    url:'{{route('list_emp_kpi')}}',
-                   method: 'post',
+
                    data:{
                      id:  employee_id,
                    },

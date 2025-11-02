@@ -41,14 +41,15 @@
                             </table>
                         </div>
 
-                        <div class="row-cols-8">
-                        <div class="col-4 my-4">
-                            <button type="submit" id="submit_later" class="btn btn-outline-dark"> Submit For Later</button>
+                        <div class="row justify-content-end m-4">
+                        <div class=" m-2 ">
+                            <button type="submit" name="action"  value="submit_later" id="submit_later" class="btn btn-outline-dark"> Submit For Later</button>
                         </div>
 
-                        <div class="col-4 my-4">
-                            <button type="submit" id="final_submit" class="btn btn-outline-dark">Final Sbmit</button>
+                        <div class=" m-2">
+                            <button type="submit"  name="action" value="final_submit" id="final_submit" class="btn btn-outline-dark">Final Submit</button>
                         </div>
+
                         </div>
                 </form>
                 </div>
@@ -79,6 +80,19 @@
                 },
                 success:function(response){
                     $('#positionKpis').html(response.html);
+                       if(response.allFinalized){
+
+                           $('#submit_later').prop('disabled',true).addClass('disabled');
+                           $('#final_submit').prop('disabled',true).addClass('disabled');
+                           $('.weight').prop('disabled',true).addClass('disabled');
+                           $('.target').prop('disabled',true).addClass('disabled');
+                       }
+                       else{
+                           $('#submit_later').prop('disabled',false).removeClass('disabled');
+                           $('#final_submit').prop('disabled',false).removeClass('disabled');
+                           $('.weight').prop('disabled',false).removeClass('disabled');
+                           $('.target').prop('disabled',false).removeClass('disabled');
+                       }
                 },
                 error: function(xhr) {
                     console.error(xhr.responseText);
@@ -112,6 +126,7 @@
 
             }
 
+
             $('#final_submit').on('click', function(e) {
                 let total = 0;
                 $('.weight').each(function() {
@@ -122,6 +137,8 @@
                     e.preventDefault();
                     alert('Total weight must be exactly 100 to submit.');
                 }
+                $('#submit_later').prop('disabled',true).addClass('disabled')
+
             });
 
             $('body').on('input','.weight',function(){

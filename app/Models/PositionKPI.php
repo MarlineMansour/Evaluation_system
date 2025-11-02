@@ -19,7 +19,7 @@ class PositionKPI extends Model
         'created_by',
         'updated_by',
         'deleted_by',
-
+        'is_finalized',
     ];
 
     public function createdBy(){

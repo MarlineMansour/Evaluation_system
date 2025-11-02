@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KpiController;
+use App\Jobs\CreateEvaluationJob;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,10 +32,13 @@ Route::middleware('auth')->group(function(){
     Route::match(['get','post'],'/list_kpis',[KpiController::class,'getKpis'])->name('list_kpis');
     Route::post('/store_position_kpi',[KpiController::class,'storePositionKpi'])->name('store_position_kpi');
 
+
     //evaluation
     Route::get('/evaluate',[EvaluationController::class,'index'])->name('evaluate');
     Route::match(['get','post'],'/list_emp_kpi',[EvaluationController::class,'empKpis'])->name('list_emp_kpi');
-
+    Route::get('/create_emp_eval_row',function (){
+        CreateEvaluationJob::dispatch();
+    });
 
     Route::get('logout',[AuthController::class,'logout'])->name('logout');
 });

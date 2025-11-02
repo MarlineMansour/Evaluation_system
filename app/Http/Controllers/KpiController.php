@@ -51,27 +51,26 @@ return view('manager.kpis.index',compact('positions'));
                     'KPIs'        => $firstRecord->KPIs,
                     'target'      => $userRecord->target ?? null,
                     'weight'      => $userRecord->weight ?? null,
+                    'is_finalized'=> $userRecord->is_finalized ?? null,
+
                 ];
             })->values(); // reset array keys for Blade iteration
         }
 
         $html = view('manager.kpis.view', compact('merged','authUser'))->render();
-
-        return response()->json(['html' => $html]);
+        $allFinalized = $merged->every(fn($item) => $item->is_finalized);
+        return response()->json(['html' => $html , 'allFinalized'=> $allFinalized]);
     }
 
     public function storePositionKpi(Request $request){
 
         try
         {
-//            dd('hhg');
+
             DB::beginTransaction();
             $validated = $request->validate([
-            'kpi_id.*' => 'required|exists:kpis,id',
-            'position_id.*' => 'required|exists:positions,id',
-//            'target.*' => 'numeric',
-//            'weight.*' => 'numeric',
-        ]);
+             'kpi_id.*' => 'required|exists:kpis,id',
+             'position_id.*' => 'required|exists:positions,id',]);
 
         for ($i = 0; $i < count($validated['kpi_id']); $i++) {
             if (
@@ -86,17 +85,23 @@ return view('manager.kpis.index',compact('positions'));
             $positionId = $validated['position_id'][$i];
             $kpiId = $validated['kpi_id'][$i];
 
+
             $existingKpi = PositionKPI::where('position_id', $positionId)
                 ->where('kpi_id', $kpiId)
                 ->where('created_by', Auth::id())
                 ->first();
 
+            $isFinalized = $request->action === 'final_submit' ? 1 : 0;
+
             if ($existingKpi) {
-                $existingKpi->update([
+
+               $existingKpi->update([
                     'target' => $request['target'][$i],
                     'weight' => $request['weight'][$i],
                     'updated_by' => Auth::id(),
+                    'is_finalized'=>$isFinalized,
                 ]);
+
             } else {
 
                 PositionKPI::create([
@@ -106,6 +111,7 @@ return view('manager.kpis.index',compact('positions'));
                     'weight' => $request['weight'][$i],
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
+                    'is_finalized'=>$isFinalized,
                 ]);
             }
         }
@@ -119,6 +125,7 @@ return view('manager.kpis.index',compact('positions'));
         throw $ex;
         }
 }
+
 
 }
 

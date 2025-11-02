@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('evaluation', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('restrict');
-            $table->boolean('target_is_set');
-            $table->float('kpis_score')->nullable();
-            $table->float('competencies_score')->nullable();
-            $table->decimal('total_score',5,2);
+            $table->foreignId('manager_id')->constrained()->onDelete('restrict');
+            $table->foreignId('position_id')->constrained()->onDelete('restrict');
+            $table->decimal('kpis_score',5,2)->nullable();
+            $table->decimal('competencies_score',5,2)->nullable();
+            $table->decimal('total_score',5,2)->nullable();
             $table->foreignId('created_by')->constrained()->nullOnDelete();
             $table->foreignId('updated_by')->constrained()->nullOnDelete();
             $table->foreignId('deleted_by')->nullable()->constrained()->nullOnDelete();
