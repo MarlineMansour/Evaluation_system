@@ -137,7 +137,7 @@
                     e.preventDefault();
                     alert('Total weight must be exactly 100 to submit.');
                 }
-                $('#submit_later').prop('disabled',true).addClass('disabled')
+
 
             });
 

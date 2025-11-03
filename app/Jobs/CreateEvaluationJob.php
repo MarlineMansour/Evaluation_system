@@ -18,10 +18,10 @@ class CreateEvaluationJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public int $userId;
-    public function __construct(int $userId)
+    public  $userId;
+    public function __construct($userId)
     {
-        'created_by' => $this->userId,
+         $this->userId = $userId;
 
     }
 
@@ -40,10 +40,10 @@ class CreateEvaluationJob implements ShouldQueue
                     'employee_id' => $employee->id,
                     'position_id' => $employee->position_id,
                     'manager_id' => $employee->manager_id,
-                    'kpis_score' => $employee->kpis_score ?? 0,
-                    'competencies_score' => $employee->competencies_score ?? 0,
-                    'total_score' => ($employee->kpis_score ?? 0) + ($employee->competencies_score ?? 0),
-                    'created_by' => Auth::id(),
+                    'kpis_score' => $employee->kpis_score ?? null,
+                    'competencies_score' => $employee->competencies_score ?? null,
+                    'total_score' => ($employee->kpis_score ?? null) + ($employee->competencies_score ?? null),
+                    'created_by' => $this->userId,
                 ]);
             }
         }

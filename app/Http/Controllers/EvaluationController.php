@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Competency;
 use App\Models\Employee;
 use App\Models\employeeKpiEvaluation;
 use App\Models\Evaluation;
@@ -13,34 +14,50 @@ use Illuminate\Support\Facades\Auth;
 
 class EvaluationController extends Controller
 {
-  public function index(){
-      $manager_id= Employee::query()->where('user_id', Auth::id())->value('id');
-      $employees = Employee::where('manager_id',$manager_id)->get();
-      return view('manager.evaluation.index',compact('employees'));
-  }
+    public function index()
+    {
+        $manager_id = Employee::query()->where('user_id', Auth::id())->value('id');
+        $employees = Employee::where('manager_id', $manager_id)->get();
+        return view('manager.evaluation.index', compact('employees'));
+    }
 
-  public function empKpis(Request $request){
+    public function empKpisAndComptencies(Request $request)
+    {
 
-     $employee = Employee::with('position')->findOrFail($request->id);
+        $employee = Employee::with('position')->where('id', $request->id)->first();
 
-     if($employee->position->type == "KPIs & Competencies"){
+        if ($employee->position->type === " KPIs & Competencies") {
+           $data['position_kpis'] = PositionKPI::where('position_id', $employee->position->id)
+                ->whereNotNull('target')
+                ->where('created_by', Auth::id())
+                ->with('KPIs')
+                ->get();
+            $data['competencies'] = Competency::where('department_id',$employee->department_id)->get();
 
-       $position_kpis = PositionKPI::where('position_id', $employee->position->id)
-           ->whereNotNull('target')
-           ->with('KPIs:id,name_en')
-           ->get();
+            $html = view('manager.evaluation.emp_eval', [
+                'position_kpis' => $data['position_kpis'],
+                'competencies'  => $data['competencies'],
+            ])->render();
 
-       $Kpi_eval=employeeKpiEvaluation::where('kpi_id',$position_kpis->KPIs->id)->get();
+            return response()->json(['html' => $html]);
 
-       $html = view('manager.evaluation.emp_kpi_eval', compact('Kpi_eval'))->render();
+        }
 
-         return response()->json(['html' => $html]);
+    }
 
-
-
-
-     }
-  }
+//    public function storeEmpKpiEval(Request $request){
+//
+//        $kpiId = $request['kpi_id'][$i];
+//          EmployeeKpiEvaluation::create([
+//              'employee_id'=> $request->,
+//              'kpi_id'=> $kpiId,
+//              'score'=> $request->score,
+//              'weighted_score'=>$request->weighted_score,
+//
+//
+//          ]);
+//    }
+}
 
 
 //  public function addRowInEvaluation(){
