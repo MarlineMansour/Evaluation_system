@@ -48,6 +48,10 @@ class Employee extends Model
         return $this->belongsTo(Position::class,'position_id');
     }
 
+    public function compEvaluation(){
+        return $this->hasMany(employeeCompetencyEvaluation::class,'employee_id');
+    }
+
 
 
 }

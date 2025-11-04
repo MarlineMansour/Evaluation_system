@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function(){
     //evaluation
     Route::get('/evaluate',[EvaluationController::class,'index'])->name('evaluate');
     Route::match(['get','post'],'/list_emp_kpi',[EvaluationController::class,'empKpisAndComptencies'])->name('list_emp_kpi');
-    Route::match(['get','post'],'/store_emp_kpi_eval',[EvaluationController::class,'storeEmpKpiEval'])->name('store_emp_kpi_eval');
+    Route::post('/store_emp_eval',[EvaluationController::class,'storeEmpEval'])->name('store_emp_eval');
 //    Route::get('/create_emp_eval_row',function (){
 //        CreateEvaluationJob::dispatch(Auth::id());
 //    });

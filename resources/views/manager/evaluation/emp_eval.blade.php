@@ -21,13 +21,15 @@
             <td>{{$eval->KPIs->is_linear==1 ? 'linear':'Inverted'}}</td>
             <td>{{ $eval->target }}</td>
             <td class="stored_weight">{{ $eval->weight}}</td>
+            <input type="hidden" name="kpis[]" value="{{ $eval->KPIs->id }}">
+            <input type="hidden" name="position_id" value="{{$eval->position_id}}">
 
             <td>
-                <input type="number" name="score[]" placeholder="Enter Score" class="form-control score">
+                <input type="number" name="score[]" placeholder="Enter Score" class="form-control score"  >
             </td>
             <td>
-                <span class="weighted_score"></span>
-                <input type="hidden" name="weighted_score[]" step="0.01"  class="form-control ">
+                <span class="weightedScore"></span>
+                <input type="hidden" name="weighted_score[]" step="0.01"  class="form-control weightedScore " >
             </td>
 
         </tr>
@@ -41,6 +43,7 @@
 </table>
 <div class="mt-3">
     <strong class="text-warning">Total Score: <span id="totalKpiScore">0</span>%</strong>
+    <input type="hidden" name="totalKpiScore" class="totalKpiScore">
 </div>
 
 <table class="table table-bordered"  width="100%" cellspacing="0">
@@ -49,35 +52,61 @@
     <tr>
         <th>ID</th>
         <th>Competency</th>
-        <th>Need Enhancement</th>
-
+        <th>Need Improvement</th>
+        <th>Below Expectations</th>
+        <th>Meet Expectations</th>
+        <th>Above Expectations</th>
+        <th>Exceed Expectations</th>
     </tr>
     </thead>
 
     <tbody>
     @forelse($competencies as $comp)
+        @php
+            $score = optional($comp->evaluation->first())->score;
+        @endphp
         <tr>
             <td>{{ $comp->id }}</td>
             <td>{{ $comp->name_en }}</td>
+            <input type="hidden" name="competency_id[]" value="{{ $comp->id }}">
 
+            @foreach ([20, 40, 60, 80, 100] as $val)
+                <td class="align-content-center">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <input type="radio"
+                               name="compScore[{{ $comp->id }}]"
+                               class="form-control-md compScore"
+                               value="{{ $val }}"
+                            {{ $score == $val ? 'checked' : '' }}>
+                    </div>
+                </td>
+            @endforeach
 
-            <td class="row justify-content-between " >
-
-                <input type="radio" name="score[]" class="form-control-sm score " value ="20">
-            </td>
-                <label>Below Expectations
-                    <input type="radio" name="score[]" class="form-control-sm score " value="40">
-                </label>
-                <label> Meet Expectations
-                    <input type="radio" name="score[]" class="form-control-sm score " value="60">
-                </label>
-                <label>Above Expectations
-                    <input type="radio" name="score[]" class="form-control-sm score " value="80">
-                </label>
-                <label>Exceed Expectations
-                    <input type="radio" name="score[]" class="form-control-sm score" value="100">
-                </label>
-            </td>
+{{--            <td class="align-content-center">--}}
+{{--                <div class="d-flex justify-content-center align-items-center">--}}
+{{--                    <input type="radio" name="compScore[{{$comp->id}}]" class="form-control-md compScore" value ="20" {{$comp->evaluation->first()->score == 20 ? 'checked': ''}}>--}}
+{{--                </div>--}}
+{{--            </td>--}}
+{{--            <td class="align-content-center">--}}
+{{--                <div class="d-flex justify-content-center align-items-center">--}}
+{{--                     <input type="radio" name="compScore[{{$comp->id}}]" class="form-control-md compScore" value="40" {{$comp->evaluation->first()->score == 40 ? 'checked': ''}}>--}}
+{{--                </div>--}}
+{{--            </td>--}}
+{{--            <td class="align-content-center">--}}
+{{--                <div class="d-flex justify-content-center align-items-center">--}}
+{{--                       <input type="radio" name="compScore[{{$comp->id}}]" class="form-control-md compScore" value="60" {{$comp->evaluation->first()->score == 60 ? 'checked': ''}}>--}}
+{{--                </div>--}}
+{{--            </td>--}}
+{{--            <td class="align-content-center">--}}
+{{--                <div class="d-flex justify-content-center align-items-center">--}}
+{{--                      <input type="radio" name="compScore[{{$comp->id}}]" class="form-control-md compScore" value="80" {{$comp->evaluation->first()->score == 80 ? 'checked': ''}}>--}}
+{{--                </div>--}}
+{{--            </td>--}}
+{{--            <td class="align-content-center">--}}
+{{--                <div class="d-flex justify-content-center align-items-center">--}}
+{{--                    <input type="radio" name="compScore[{{$comp->id}}]" class="form-control-md compScore" value="100" {{$comp->evaluation->first()->score == 100 ? 'checked': ''}}>--}}
+{{--                </div>--}}
+{{--            </td>--}}
 
         </tr>
     @empty
@@ -89,6 +118,7 @@
     </tbody>
 </table>
 <div class="mt-3">
-    <strong class="text-warning">Total Score: <span id="totalScore">0</span>%</strong>
+    <strong class="text-warning">Total Score: <span id="totalCompScore">0</span>%</strong>
+    <input type="hidden" name="totalCompScore" class="totalCompScore">
 </div>
 

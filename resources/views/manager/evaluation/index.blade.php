@@ -3,12 +3,19 @@
 @section('title', 'evaluation')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+    <form  id="kpi_form" action="{{route('store_emp_eval')}}" method="post">
+        @csrf
     <div class="card container">
         <div class="card shadow mb-4">
           <div class="card-header py-3">
             <div class="row-cols-6">
 
-             <select class="employees form-control p-2">
+             <select name="employee_id" class="employees form-control p-2">
                     <option value="" selected disabled>Choose Employee</option>
                     @foreach($employees as $employee)
                         <option value="{{ $employee->id }}">{{ $employee->name_en }}</option>
@@ -27,9 +34,9 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <form  id="kpi_form" action="{{route('store_emp_kpi_eval')}}" method=post">
-                        @csrf
-                        <div id="employeeKpisEval">
+
+{{--                        <input type="hidden" name="employee_id" value="{{$employee->id}}">--}}
+                        <div id="employeeEval">
                             <table class="table table-bordered" id="dataTable">
                                 <thead>
                                 <tr>
@@ -55,7 +62,7 @@
                             </div>
 
                         </div>
-                    </form>
+
                 </div>
             </div>
 
@@ -63,6 +70,7 @@
 
 
     </div>
+    </form>
 
 @endsection
 @section('script')
@@ -81,10 +89,27 @@
                         id:  employee_id,
                    },
                    beforeSend: function() {
-                       $('#employeeKpisEval').html('<tr><td colspan="4">Loading KPIs...</td></tr>');
+                       $('#employeeEval').html('<tr><td colspan="4">Loading KPIs...</td></tr>');
+                       // if(response.allFinalized){
+                       //
+                       //     $('#submit_later').prop('disabled',true).addClass('disabled');
+                       //     $('#final_submit').prop('disabled',true).addClass('disabled');
+                       //     $('.weight').prop('disabled',true).addClass('disabled');
+                       //     $('.target').prop('disabled',true).addClass('disabled');
+                       // }
+                       // else{
+                       //     $('#submit_later').prop('disabled',false).removeClass('disabled');
+                       //     $('#final_submit').prop('disabled',false).removeClass('disabled');
+                       //     $('.weight').prop('disabled',false).removeClass('disabled');
+                       //     $('.target').prop('disabled',false).removeClass('disabled');
+                       // }
                    },
                    success:function(response){
-                       $('#employeeKpisEval').html(response.html);
+                       $('#employeeEval').html(response.html);
+                   },
+                   error: function(xhr) {
+                       console.error(xhr.responseText);
+                       $('#employeeEval').html('<tr><td colspan="4" class="text-danger">Error loading Data</td></tr>');
                    }
 
                });
@@ -97,17 +122,33 @@
                 let score = parseFloat($(this).val()) || 0;
                 // console.log(score);
                 let weighted_score = ((score * weight)/100).toFixed(2);
-                row.find('.weighted_score').html(weighted_score);
+                row.find('.weightedScore').html(weighted_score);
+                row.find('.weightedScore').val(weighted_score);
                 let total = 0;
-                $('.score').each(function() {
-                    total += parseFloat($(this).val()) || 0;
-                    console.log()
+                $('.weightedScore').each(function() {
+                    total += parseFloat($(this).html()) || 0;
                     $('#totalKpiScore').html(total.toFixed(2));
                 });
+                $('.totalKpiScore').val(total.toFixed(2));
             });
+
+
 
         });
 
+    $(document).on('change', '.compScore', function(){
+        let total=0;
+        let counts =0;
+        $('.compScore:checked').each(function() {
+            counts++;
+            total += (parseInt($(this).val()) || 0);
+            $('#totalCompScore').html((total.toFixed(2))/counts);
+        });
+        // console.log(counts,total);
+
+        $('.totalCompScore').val((total.toFixed(2))/counts);
+
+    });
 
     </script>
 

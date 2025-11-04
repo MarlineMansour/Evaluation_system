@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('employee_id')->constrained()->onDelete('restrict');
             $table->foreignId('competency_id')->constrained()->onDelete('restrict');
-            $table->enum('score',['Needs Improvement','Below Expectations','Meets Expectations','Above Expectations','Exceeds Expectations'])->nullable();
+            $table->integer('score')->nullable();
             $table->foreignId('created_by')->constrained()->nullOnDelete();
             $table->foreignId('updated_by')->constrained()->nullOnDelete();
             $table->foreignId('deleted_by')->nullable()->constrained()->nullOnDelete();

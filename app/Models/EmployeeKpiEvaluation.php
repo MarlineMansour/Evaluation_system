@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class employeeKpiEvaluation extends Model
 {
     use HasFactory ,SoftDeletes;
+    protected $table = 'employee_kpis_evaluation';
     protected $fillable = [
         'employee_id',
         'kpi_id',
@@ -17,6 +18,7 @@ class employeeKpiEvaluation extends Model
         'created_by',
         'updated_by',
         'deleted_by',
+        'is_finalized',
     ];
     public function createdBy(){
         return $this->belongsTo(User::class);

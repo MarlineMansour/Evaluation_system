@@ -36,4 +36,5 @@ class PositionKPI extends Model
         return $this->belongsTo(Kpi::class, 'kpi_id');
     }
 
+
 }

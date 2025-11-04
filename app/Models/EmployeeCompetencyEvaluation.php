@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class employeeCompetencyEvaluation extends Model
 {
     use HasFactory, SoftDeletes ;
+    protected $table = 'employee_competencies_evaluation';
     protected $fillable = [
         'employee_id',
         'competency_id',
@@ -16,6 +17,7 @@ class employeeCompetencyEvaluation extends Model
         'created_by',
         'updated_by',
         'deleted_by',
+        'is_finalized',
     ];
     public function createdBy(){
         return $this->belongsTo(User::class);
@@ -26,4 +28,8 @@ class employeeCompetencyEvaluation extends Model
     public function deletedBy(){
         return $this->belongsTo(User::class);
     }
+    public function employee(){
+        return $this->belongsTo(Employee::class,'employee_id');
+    }
+
 }
