@@ -42,7 +42,11 @@
         <a class="nav-link" href="{{route('evaluate')}}">
             <span>Evaluate</span></a>
     </li>
-
+    <hr class="sidebar-divider">
+    <li class="nav-item active">
+        <a class="nav-link" href="{{route('myEval')}}">
+            <span>My Evaluation</span></a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

@@ -20,6 +20,7 @@ class Evaluation extends Model
         'created_by',
         'updated_by',
         'deleted_by',
+        'is_finalized',
     ];
     public function createdBy(){
         return $this->belongsTo(User::class);

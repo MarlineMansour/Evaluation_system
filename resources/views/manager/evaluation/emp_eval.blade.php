@@ -15,21 +15,24 @@
 
     <tbody>
     @forelse($position_kpis as $eval)
+        @php
+            $evaluation = $eval->KPIs->evaluation->first(); // get the first evaluation for this employee
+        @endphp
         <tr>
             <td>{{ $eval->KPIs->id }}</td>
             <td>{{ $eval->KPIs->name_en }}</td>
-            <td>{{$eval->KPIs->is_linear==1 ? 'linear':'Inverted'}}</td>
-            <td>{{ $eval->target }}</td>
+            <td class="type">{{$eval->KPIs->is_linear==1 ? 'linear':'Inverted'}}</td>
+            <td class="target">{{ $eval->target }}</td>
             <td class="stored_weight">{{ $eval->weight}}</td>
             <input type="hidden" name="kpis[]" value="{{ $eval->KPIs->id }}">
             <input type="hidden" name="position_id" value="{{$eval->position_id}}">
 
             <td>
-                <input type="number" name="score[]" placeholder="Enter Score" class="form-control score"  >
+                <input type="number" name="score[]" placeholder="Enter Score" class="form-control score"  min="0" value="{{$evaluation->score ?? 0 }}">
             </td>
             <td>
-                <span class="weightedScore"></span>
-                <input type="hidden" name="weighted_score[]" step="0.01"  class="form-control weightedScore " >
+                <span class="weightedScore">{{$evaluation->weighted_score ?? 0}}</span>
+                <input type="hidden" name="weighted_score[]" step="0.01"  class="form-control weightedScore " value="{{$evaluation->weighted_score ?? 0}}">
             </td>
 
         </tr>
@@ -42,8 +45,9 @@
     </tbody>
 </table>
 <div class="mt-3">
-    <strong class="text-warning">Total Score: <span id="totalKpiScore">0</span>%</strong>
-    <input type="hidden" name="totalKpiScore" class="totalKpiScore">
+    <strong class="text-warning">Total Score: <span id="totalKpiScore">{{$final->kpis_score ?? 0}}</span>%</strong>
+    <input type="hidden" name="totalKpiScore" class="totalKpiScore" value="{{$final->kpis_score ?? ''}}" >
+
 </div>
 
 <table class="table table-bordered"  width="100%" cellspacing="0">
@@ -69,7 +73,7 @@
             <td>{{ $comp->id }}</td>
             <td>{{ $comp->name_en }}</td>
             <input type="hidden" name="competency_id[]" value="{{ $comp->id }}">
-
+            <input type="hidden" name="emp_posiyion_id" value="{{$employee->position_id}}">
             @foreach ([20, 40, 60, 80, 100] as $val)
                 <td class="align-content-center">
                     <div class="d-flex justify-content-center align-items-center">
@@ -118,7 +122,7 @@
     </tbody>
 </table>
 <div class="mt-3">
-    <strong class="text-warning">Total Score: <span id="totalCompScore">0</span>%</strong>
-    <input type="hidden" name="totalCompScore" class="totalCompScore">
+    <strong class="text-warning">Total Score: <span id="totalCompScore">{{$final->competencies_score ?? 0}}</span>%</strong>
+    <input type="hidden" name="totalCompScore" class="totalCompScore" value="{{$final->competencies_score ?? ''}}">
 </div>
 

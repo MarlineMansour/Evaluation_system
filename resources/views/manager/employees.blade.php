@@ -20,7 +20,6 @@
                             <th>Position</th>
                             <th>Department</th>
                             <th>Manager</th>
-                            <th>Actions</th>
                         </tr>
                         </thead>
 

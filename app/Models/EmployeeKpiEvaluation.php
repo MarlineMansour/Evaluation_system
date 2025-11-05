@@ -29,4 +29,14 @@ class employeeKpiEvaluation extends Model
     public function deletedBy(){
         return $this->belongsTo(User::class);
     }
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id');
+    }
+
+    public function kpi()
+    {
+        return $this->belongsTo(Kpi::class, 'kpi_id');
+    }
+
 }

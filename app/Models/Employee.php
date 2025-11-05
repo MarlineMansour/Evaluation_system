@@ -39,7 +39,7 @@ class Employee extends Model
     }
 
     public function manager(){
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class,'manager_id');
     }
     public function department(){
         return $this->belongsTo(Department::class);
@@ -49,7 +49,15 @@ class Employee extends Model
     }
 
     public function compEvaluation(){
-        return $this->hasMany(employeeCompetencyEvaluation::class,'employee_id');
+        return $this->hasMany(EmployeeCompetencyEvaluation::class,'employee_id');
+    }
+
+    public function kpiEvaluation(){
+        return $this->hasMany(EmployeeKpiEvaluation::class,'employee_id');
+    }
+    public function finalEvaluation($position_id){
+        return $this->hasMany(Evaluation::class,'employee_id')
+            ->where('position_id',$position_id)->first();
     }
 
 

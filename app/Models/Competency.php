@@ -33,6 +33,6 @@ use SoftDeletes;
         return $this->belongsTo(Department::class,'department_id');
      }
      public function evaluation(){
-        return $this->hasMany(employeeCompetencyEvaluation::class,'competency_id');
+        return $this->hasMany(EmployeeCompetencyEvaluation::class,'competency_id');
      }
 }

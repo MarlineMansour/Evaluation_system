@@ -23,33 +23,40 @@ class EvaluationController extends Controller
         return view('manager.evaluation.index', compact('employees'));
     }
 
-    public function empKpisAndComptencies(Request $request)
-    {
+    public function empKpisAndComptencies(Request $request){
 
-        $employee = Employee::with(['position', 'compEvaluation'])->where('id', $request->id)->first();
-//        dd($employee);
-
+        $employee = Employee::with(['position', 'compEvaluation' ,'kpiEvaluation'])->where('id', $request->id)->first();
+//       dd($employee);
+        $data['employee'] = $employee;
         if ($employee->position->type === " KPIs & Competencies") {
             $data['position_kpis'] = PositionKPI::where('position_id', $employee->position->id)
                 ->whereNotNull('target')
                 ->where('created_by', Auth::id())
-                ->with('KPIs')
+                ->with(['KPIs','KPIs.evaluation' =>function($query) use($employee){
+                    $query->where('employee_id', $employee->id);
+                }])
                 ->get();
 //            $data['competencies'] = Competency::where('department_id', $employee->department_id)->get();
             $data['competencies'] = Competency::with(['evaluation' => function ($query) use ($employee) {
                 $query->where('employee_id', $employee->id);
             }])->where('department_id', $employee->department_id)->get();
+//            dd($data['employee']);
+//            $data['compEvaluation'] = $employee->compEvaluation ;
 
-            $data['compEvaluation'] = $employee->compEvaluation ;
-            dd($data['competencies']);
+            $allKpisFinalized = $employee->kpiEvaluation->every(fn($item) => $item->is_finalized);
+            $allCompFinalized = $employee->compEvaluation->every(fn($item) => $item->is_finalized);
+
+            $allFinalized = $allKpisFinalized && $allCompFinalized;
+$data['eval']=Evaluation::where('employee_id',$employee->id)->where('position_id', $employee->position->id)->first();
 
             $html = view('manager.evaluation.emp_eval', [
                 'position_kpis' => $data['position_kpis'],
                 'competencies' => $data['competencies'],
+                'employee'=>$data['employee'],
+                'final' =>$data['eval'],
             ])->render();
 
-
-            return response()->json(['html' => $html]);
+            return response()->json(['html' => $html , 'allFinalized'=>$allFinalized]);
 
         }
 
@@ -58,15 +65,20 @@ class EvaluationController extends Controller
     public function storeEmpEval(Request $request)
     {
 //dd($request);
+        $final=$request->action === "final_submit" ? 1 : 0;
+//dd($request->kpis ,$final);
+
         try {
             DB::beginTransaction();
-            if($request['kpis']){
+            if (!empty($request->kpis)) {
+//dd('marline');
                 for ($i = 0; $i < count($request['kpis']); $i++) {
                     if (
                         !isset($request['kpis'][$i]) ||
                         !isset($request['score'][$i]) ||
                         !isset($request['weighted_score'][$i])
                     ) {
+                        dd($request);
                         continue;
                     }
                     $kpiId = $request['kpis'][$i];
@@ -74,12 +86,12 @@ class EvaluationController extends Controller
                         [
                             'employee_id' => $request->employee_id,
                             'kpi_id' => $kpiId,
+                            'created_by' => Auth::id(),
                         ],
                         [
                             'score' => $request['score'][$i],
                             'weighted_score' => $request['weighted_score'][$i],
-                            'is_finalized' => $request->action == "final_submit" ? '1' : '0',
-                            'created_by' => Auth::id(),
+                            'is_finalized' => $final,
                             'updated_by' => Auth::id(),
                         ]
                     );
@@ -101,23 +113,23 @@ class EvaluationController extends Controller
                     [
                         'employee_id' => $request->employee_id,
                         'competency_id' => $request->competency_id[$i],
+                        'created_by' => Auth::id(),
                     ],
                     [
                         'score' => $request->compScore[$compID],
-                        'is_finalized' => $request->action == "final_submit" ? '1' : '0',
-                        'created_by' => Auth::id(),
+                        'is_finalized' => $final,
                         'updated_by' => Auth::id(),
                     ]
                 );
 
 
             }
-
-            if ($request->action == "final_submit") {
+//dd($request);
 
                 $exists = Evaluation::where('employee_id', $request->employee_id)
-                    ->where('position_id', $request->position_id)
+                    ->where('position_id', $request->emp_posiyion_id)
                     ->first();
+
 
                 $kpi_score = $request->totalKpiScore;
                 $total_kpis_score = ($kpi_score * 70) / 100;
@@ -130,12 +142,14 @@ class EvaluationController extends Controller
                     'competencies_score' => $competencies_score,
                     'total_score' => $total,
                     'updated_by' => Auth::id(),
+                    'is_finalized'=>$final,
 
                 ]);
-            }
+
 
             DB::commit();
             return redirect()->route('evaluate')->with('success', 'Data saved successfully!');
+
         } catch (Exception $ex) {
             dd($ex);
             DB::rollBack();

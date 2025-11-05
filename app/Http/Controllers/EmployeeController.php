@@ -34,15 +34,6 @@ class EmployeeController extends Controller
                 ->editColumn('position', fn($emp) => optional($emp->position)->name_en ?? '-')
                 ->editColumn('department', fn($emp) => optional($emp->department)->name_en ?? '-')
                 ->editColumn('manager', fn($emp) => optional($emp->manager)->name_en ?? '-')
-                ->addColumn('actions', fn($emp) => '
-            <button data-bs-toggle="modal" data-bs-target="#Modal2" data_id="'.$emp->id.'" class="update">
-                <i class="fa-solid fa-pen"></i>
-            </button>
-            <button class="delete" data_id="'.$emp->id.'">
-                <i class="fa-solid fa-trash"></i>
-            </button>'
-                )
-                ->rawColumns(['actions'])
                 ->make(true);
         }
 
@@ -50,4 +41,11 @@ class EmployeeController extends Controller
     }
 
 
+    public function myevaluation(){
+        $userID =Auth::id();
+     $employeeEvaluation = Employee::with(['position','department' , 'manager'])->where('user_id', $userID)->first();
+
+//dd($employeeEvaluation);
+        return view('emp_total_eval', ['employeeEvaluation'=>$employeeEvaluation]);
+    }
 }

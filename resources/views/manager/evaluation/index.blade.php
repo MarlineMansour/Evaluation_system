@@ -90,22 +90,25 @@
                    },
                    beforeSend: function() {
                        $('#employeeEval').html('<tr><td colspan="4">Loading KPIs...</td></tr>');
-                       // if(response.allFinalized){
-                       //
-                       //     $('#submit_later').prop('disabled',true).addClass('disabled');
-                       //     $('#final_submit').prop('disabled',true).addClass('disabled');
-                       //     $('.weight').prop('disabled',true).addClass('disabled');
-                       //     $('.target').prop('disabled',true).addClass('disabled');
-                       // }
-                       // else{
-                       //     $('#submit_later').prop('disabled',false).removeClass('disabled');
-                       //     $('#final_submit').prop('disabled',false).removeClass('disabled');
-                       //     $('.weight').prop('disabled',false).removeClass('disabled');
-                       //     $('.target').prop('disabled',false).removeClass('disabled');
-                       // }
+
                    },
                    success:function(response){
                        $('#employeeEval').html(response.html);
+                       if(response.allFinalized){
+
+                           $('#submit_later').prop('disabled',true).addClass('disabled');
+                           $('#final_submit').prop('disabled',true).addClass('disabled');
+                           $('.score').prop('disabled',true).addClass('disabled');
+                           $('.weightedScore').prop('disabled',true).addClass('disabled');
+                           $('.compScore').prop('disabled',true).addClass('disabled');
+                       }
+                       else{
+                           $('#submit_later').prop('disabled',false).removeClass('disabled');
+                           $('#final_submit').prop('disabled',false).removeClass('disabled');
+                           $('.score').prop('disabled',false).removeClass('disabled');
+                           $('.weightedScore').prop('disabled',false).removeClass('disabled');
+                           $('.compScore').prop('disabled',false).removeClass('disabled');
+                       }
                    },
                    error: function(xhr) {
                        console.error(xhr.responseText);
@@ -120,16 +123,36 @@
                 // console.log(row.find('.stored_weight').text());
                 let weight = parseFloat(row.find('.stored_weight').text()) || 0;
                 let score = parseFloat($(this).val()) || 0;
+                let target = parseFloat(row.find('.target').text()) ;
+                let type = row.find('.type').text();
+                let weighted_score =0;
+                if(type == "linear")
+                {
+                    if(score> target)
+                    {
+                        score=target;
+                    }
+                    weighted_score = ((score * weight)/100).toFixed(2);
+                }
+                else{
+                    if(score > target){
+                        score = target ;
+                    }
+                    let invertedScore = target - score;
+                    weighted_score = ((invertedScore * weight)/100).toFixed(2);
+                }
                 // console.log(score);
-                let weighted_score = ((score * weight)/100).toFixed(2);
+
                 row.find('.weightedScore').html(weighted_score);
                 row.find('.weightedScore').val(weighted_score);
                 let total = 0;
                 $('.weightedScore').each(function() {
                     total += parseFloat($(this).html()) || 0;
+                    console.log('kpis',total)
                     $('#totalKpiScore').html(total.toFixed(2));
                 });
                 $('.totalKpiScore').val(total.toFixed(2));
+
             });
 
 
@@ -142,6 +165,7 @@
         $('.compScore:checked').each(function() {
             counts++;
             total += (parseInt($(this).val()) || 0);
+
             $('#totalCompScore').html((total.toFixed(2))/counts);
         });
         // console.log(counts,total);

@@ -35,5 +35,8 @@ class Position extends Model
     public function deletedBy(){
         return $this->belongsTo(User::class);
     }
+     public function positionEvaluation(){
+        return $this->hasMany(Evaluation::class,'position_id');
+     }
 
 }

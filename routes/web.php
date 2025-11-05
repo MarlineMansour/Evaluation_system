@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function(){
 //        CreateEvaluationJob::dispatch(Auth::id());
 //    });
 
+    Route::get('/show_my_eval',[EmployeeController::class,'myevaluation'])->name('myEval');
     Route::get('logout',[AuthController::class,'logout'])->name('logout');
 });
 

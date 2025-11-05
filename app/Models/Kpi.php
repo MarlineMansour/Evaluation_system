@@ -28,4 +28,7 @@ use SoftDeletes;
     public function deletedBy(){
         return $this->belongsTo(User::class);
     }
+    public function evaluation(){
+        return $this->hasMany(EmployeeKpiEvaluation::class,'kpi_id');
+    }
 }
