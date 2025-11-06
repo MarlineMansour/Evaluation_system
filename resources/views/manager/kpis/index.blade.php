@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', 'KPIs')
+@section('title', ' Kpis Target and Weight')
 
 @section('content')
     <div class="card container">

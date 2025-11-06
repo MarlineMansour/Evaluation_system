@@ -37,9 +37,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">New Category</h5>
-                    <button type="button" class="btn-close closeModal2" data-bs-dismiss="modal" aria-label="Close" ></button>
+                    <button type="button" class="btn-close closeModal2" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="update_model_book" >
+                <div class="modal-body" id="update_model_book">
 
                 </div>
 
@@ -52,19 +53,19 @@
 
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
 
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax:'{{route('employees')}}',
+                ajax: '{{route('employees')}}',
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex',orderable:false,searchable:false },
-                    { data: 'name_en', name: 'name_en' },
-                    { data: 'position', name: 'position' },
-                    { data: 'department', name: 'department' },
-                    { data: 'manager', name: 'manager' },
-                    { data: 'actions', name: 'actions' },
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+                    {data: 'name_en', name: 'name_en'},
+                    {data: 'position', name: 'position'},
+                    {data: 'department', name: 'department'},
+                    {data: 'manager', name: 'manager'},
+
                 ]
 
             });

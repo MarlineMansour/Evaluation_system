@@ -13,6 +13,7 @@ use App\Models\PositionKPI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class EvaluationController extends Controller
 {
@@ -23,16 +24,17 @@ class EvaluationController extends Controller
         return view('manager.evaluation.index', compact('employees'));
     }
 
-    public function empKpisAndComptencies(Request $request){
+    public function empKpisAndComptencies(Request $request)
+    {
 
-        $employee = Employee::with(['position', 'compEvaluation' ,'kpiEvaluation'])->where('id', $request->id)->first();
+        $employee = Employee::with(['position', 'compEvaluation', 'kpiEvaluation'])->where('id', $request->id)->first();
 //       dd($employee);
         $data['employee'] = $employee;
         if ($employee->position->type === " KPIs & Competencies") {
             $data['position_kpis'] = PositionKPI::where('position_id', $employee->position->id)
                 ->whereNotNull('target')
                 ->where('created_by', Auth::id())
-                ->with(['KPIs','KPIs.evaluation' =>function($query) use($employee){
+                ->with(['KPIs', 'KPIs.evaluation' => function ($query) use ($employee) {
                     $query->where('employee_id', $employee->id);
                 }])
                 ->get();
@@ -47,16 +49,16 @@ class EvaluationController extends Controller
             $allCompFinalized = $employee->compEvaluation->every(fn($item) => $item->is_finalized);
 
             $allFinalized = $allKpisFinalized && $allCompFinalized;
-$data['eval']=Evaluation::where('employee_id',$employee->id)->where('position_id', $employee->position->id)->first();
+            $data['eval'] = Evaluation::where('employee_id', $employee->id)->where('position_id', $employee->position->id)->first();
 
             $html = view('manager.evaluation.emp_eval', [
                 'position_kpis' => $data['position_kpis'],
                 'competencies' => $data['competencies'],
-                'employee'=>$data['employee'],
-                'final' =>$data['eval'],
+                'employee' => $data['employee'],
+                'final' => $data['eval'],
             ])->render();
 
-            return response()->json(['html' => $html , 'allFinalized'=>$allFinalized]);
+            return response()->json(['html' => $html, 'allFinalized' => $allFinalized]);
 
         }
 
@@ -64,14 +66,13 @@ $data['eval']=Evaluation::where('employee_id',$employee->id)->where('position_id
 
     public function storeEmpEval(Request $request)
     {
-//dd($request);
-        $final=$request->action === "final_submit" ? 1 : 0;
-//dd($request->kpis ,$final);
+        //dd($request);
+        $final = $request->action === "final_submit" ? 1 : 0;
+        //dd($request->kpis ,$final);
 
         try {
             DB::beginTransaction();
             if (!empty($request->kpis)) {
-//dd('marline');
                 for ($i = 0; $i < count($request['kpis']); $i++) {
                     if (
                         !isset($request['kpis'][$i]) ||
@@ -101,7 +102,7 @@ $data['eval']=Evaluation::where('employee_id',$employee->id)->where('position_id
 
 
             for ($i = 0; $i < count($request['competency_id']); $i++) {
-                $compID=$request->competency_id[$i];
+                $compID = $request->competency_id[$i];
                 if (
                     !isset($request['competency_id'][$i]) ||
                     !isset($request['compScore'][$compID])
@@ -124,27 +125,27 @@ $data['eval']=Evaluation::where('employee_id',$employee->id)->where('position_id
 
 
             }
-//dd($request);
+            //dd($request);
 
-                $exists = Evaluation::where('employee_id', $request->employee_id)
-                    ->where('position_id', $request->emp_posiyion_id)
-                    ->first();
+            $exists = Evaluation::where('employee_id', $request->employee_id)
+                ->where('position_id', $request->emp_posiyion_id)
+                ->first();
 
 
-                $kpi_score = $request->totalKpiScore;
-                $total_kpis_score = ($kpi_score * 70) / 100;
-                $competencies_score = $request->totalCompScore;
-                $total_competencies_score = ($competencies_score * 30) / 100;
-                $total = $total_kpis_score + $total_competencies_score;
+            $kpi_score = $request->totalKpiScore;
+            $total_kpis_score = ($kpi_score * 70) / 100;
+            $competencies_score = $request->totalCompScore;
+            $total_competencies_score = ($competencies_score * 30) / 100;
+            $total = $total_kpis_score + $total_competencies_score;
 
-                $exists->update([
-                    'kpis_score' => $kpi_score,
-                    'competencies_score' => $competencies_score,
-                    'total_score' => $total,
-                    'updated_by' => Auth::id(),
-                    'is_finalized'=>$final,
+            $exists->update([
+                'kpis_score' => $kpi_score,
+                'competencies_score' => $competencies_score,
+                'total_score' => $total,
+                'updated_by' => Auth::id(),
+                'is_finalized' => $final,
 
-                ]);
+            ]);
 
 
             DB::commit();
@@ -156,6 +157,22 @@ $data['eval']=Evaluation::where('employee_id',$employee->id)->where('position_id
             throw $ex;
         }
     }
+
+    public function fetchEvaluations(){
+        return view('evaluation.index');
+    }
+//    public function getAllEvaluations(Request $request){
+//       $employee = Employee::with(['position'])->get();
+//       $kpi= PositionKPI::with(['pos:id,name_en'])->pluck('target');
+//         return DataTables::of($employee)
+//             ->addIndexColumn()
+//             ->editColumn('Employee',function($employee){
+//                 return '<span>'.$employee->name_en.'<span> <br> <span>'.$employee->position->name_en.'</span>';
+//             })
+//             ->editColumn('Target_is_set',fn())
+//             ->rawColumns('Employee')
+//             ->make('true')
+//    }
 }
 
 

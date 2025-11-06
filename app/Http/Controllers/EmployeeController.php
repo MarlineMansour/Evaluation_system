@@ -13,21 +13,21 @@ class EmployeeController extends Controller
 
     public function getEmployees(Request $request)
     {
-        $user_id=Auth::id();
+        $user_id = Auth::id();
         if ($request->ajax()) {
-            $employee_data=Employee::where('user_id',$user_id)->first();
-             // as hr manager
-            if($employee_data->department_id==1){
+            $employee_data = Employee::where('user_id', $user_id)->first();
+            // as hr manager
+            if ($employee_data->department_id == 1) {
                 $employees = Employee::with([
                     'manager:id,name_en',
                     'department:id,name_en',
                     'position:id,name_en'
                 ])->get();
-            } else{
+            } else {
                 // as Manager
-                $employees=Employee::with([
+                $employees = Employee::with([
                     'position:id,name_en,type'
-                ])->where('manager_id',$employee_data->id)->get();
+                ])->where('manager_id', $employee_data->id)->get();
             }
             return DataTables::of($employees)
                 ->addIndexColumn()
@@ -41,11 +41,12 @@ class EmployeeController extends Controller
     }
 
 
-    public function myevaluation(){
-        $userID =Auth::id();
-     $employeeEvaluation = Employee::with(['position','department' , 'manager'])->where('user_id', $userID)->first();
+    public function myevaluation()
+    {
+        $userID = Auth::id();
+        $employeeEvaluation = Employee::with(['position', 'department', 'manager'])->where('user_id', $userID)->first();
 
-//dd($employeeEvaluation);
-        return view('emp_total_eval', ['employeeEvaluation'=>$employeeEvaluation]);
+
+        return view('emp_total_eval', ['employeeEvaluation' => $employeeEvaluation]);
     }
 }

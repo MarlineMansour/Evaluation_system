@@ -1,5 +1,3 @@
-
-
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -11,13 +9,13 @@
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
-    @if(!Auth::id())
+@if(!Auth::id())
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="{{route('login')}}">
-            <i class="fa-solid fa-arrow-right-to-bracket"></i>
-            <span>Login</span></a>
-    </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="{{route('login')}}">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <span>Login</span></a>
+        </li>
     @endif
 
     <hr class="sidebar-divider">
@@ -29,19 +27,39 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-    {{--    evaluate page--}}
-    <li class="nav-item active">
-        <a class="nav-link" href="{{route('kpis')}}">
-            <span>KPIs Target & Weight</span></a>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
+           aria-expanded="true" aria-controls="collapseTwo">
+            {{--            <i class="fas fa-fw fa-cog"></i>--}}
+            <span>KPIs Target & Weight</span>
+        </a>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                {{--                <h6 class="collapse-header">Custom Components:</h6>--}}
+                <a class="collapse-item" href="{{route('fetch_kpis')}}">All Kpis </a>
+                <a class="collapse-item" href="{{route('kpis')}}">Set Targets and Weights</a>
+            </div>
+        </div>
     </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
-{{--    evaluate page--}}
-    <li class="nav-item active">
-        <a class="nav-link" href="{{route('evaluate')}}">
-            <span>Evaluate</span></a>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+           aria-expanded="true" aria-controls="collapseTwo">
+            {{--            <i class="fas fa-fw fa-cog"></i>--}}
+            <span>Evaluate</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                {{--                <h6 class="collapse-header">Custom Components:</h6>--}}
+                <a class="collapse-item" href="{{route('fetch_evaluations')}}">All Evaluations</a>
+                <a class="collapse-item" href="{{route('evaluate')}}">Create Evaluation</a>
+            </div>
+        </div>
     </li>
+
     <hr class="sidebar-divider">
     <li class="nav-item active">
         <a class="nav-link" href="{{route('myEval')}}">

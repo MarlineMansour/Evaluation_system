@@ -11,9 +11,9 @@
     </tr>
     </thead>
     <tbody >
-    @forelse($merged as $pk)
+    @forelse($merged as $index => $pk)
         <tr>
-            <td>{{ $pk->kpi_id }}</td>
+            <td>{{$index+1}}</td>
             <td>{{ $pk->KPIs->name_en ?? '—' }}</td>
             <td>{{ $pk->KPIs->baseline ?? '—' }}</td>
 
