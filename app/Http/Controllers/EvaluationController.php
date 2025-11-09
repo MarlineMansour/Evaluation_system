@@ -149,7 +149,8 @@ class EvaluationController extends Controller
 
 
             DB::commit();
-            return redirect()->route('evaluate')->with('success', 'Data saved successfully!');
+            toast('success', 'Data saved successfully!');
+            return redirect()->route('evaluate');
 
         } catch (Exception $ex) {
             dd($ex);
@@ -158,21 +159,50 @@ class EvaluationController extends Controller
         }
     }
 
-    public function fetchEvaluations(){
+    public function fetchEvaluations()
+    {
         return view('evaluation.index');
     }
-//    public function getAllEvaluations(Request $request){
-//       $employee = Employee::with(['position'])->get();
-//       $kpi= PositionKPI::with(['pos:id,name_en'])->pluck('target');
-//         return DataTables::of($employee)
-//             ->addIndexColumn()
-//             ->editColumn('Employee',function($employee){
-//                 return '<span>'.$employee->name_en.'<span> <br> <span>'.$employee->position->name_en.'</span>';
-//             })
-//             ->editColumn('Target_is_set',fn())
-//             ->rawColumns('Employee')
-//             ->make('true')
-//    }
+
+    public function getAllEvaluations(Request $request)
+    {
+        $employee = Employee::with(['position.positionKpis', 'evaluations.createdBy.employee'])->get();
+
+//dd($employee);
+        return DataTables::of($employee)
+            ->addIndexColumn()
+            ->editColumn('Employee', function ($employee) {
+                return '<span>' . $employee->name_en . '<span> <br> <span>' .'(' . $employee->position->name_en . ' )'.'</span>';
+            })
+//            ->editColumn('Target', function ($employee) {
+//                $allTargets = $employee->position->positionKpis->every(fn($posKpi) => $posKpi->target);
+//
+//                return $allTargets
+//                    ? '<span class="badge bg-success">Yes</span>'
+//                    : '<span class="badge bg-danger">No</span>';
+//            })
+
+            ->editColumn('KPIs_Score', function ($employee) {
+                return $employee->evaluations->map(fn($eval) => $eval->kpis_score)->implode('<br>') ?: '-';
+            })
+
+            // All Competencies scores
+            ->editColumn('Competencies_Score', function ($employee) {
+                return $employee->evaluations->map(fn($eval) => $eval->competencies_score)->implode('<br>') ?: '-';
+            })
+            ->editColumn('Manager', function ($employee) {
+                return $employee->evaluations->map(fn($eval) => $eval->createdBy->employee->name_en ?? '-')->implode('<br>');
+        })
+
+            // Finalized status for each evaluation
+            ->editColumn('is_finalized', function ($employee) {
+                return $employee->evaluations->map(fn($eval) => $eval->is_finalized ?
+                    '<span class="badge bg-success">Yes</span>'
+                    :'<span class="badge bg-danger">No</span>')->implode('<br>');
+            })
+            ->rawColumns(['Employee', 'Target','KPIs_Score','Competencies_Score', 'Manager', 'is_finalized'])
+            ->make('true');
+    }
 }
 
 

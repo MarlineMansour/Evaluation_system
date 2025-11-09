@@ -4,9 +4,9 @@
 
 @section('content')
     @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+        <script>
+           toastr.success( {{ session('success') }})
+        </script>
     @endif
     <form  id="kpi_form" action="{{route('store_emp_eval')}}" method="post">
         @csrf
@@ -148,7 +148,7 @@
                 let total = 0;
                 $('.weightedScore').each(function() {
                     total += parseFloat($(this).html()) || 0;
-                    console.log('kpis',total)
+                    // console.log('kpis',total)
                     $('#totalKpiScore').html(total.toFixed(2));
                 });
                 $('.totalKpiScore').val(total.toFixed(2));

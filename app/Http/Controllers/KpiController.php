@@ -118,7 +118,8 @@ class KpiController extends Controller
                 }
             }
             DB::commit();
-            return redirect()->route('kpis')->with('success', 'KPIs saved successfully!');
+            toast('success', 'KPIs saved successfully!');
+            return redirect()->route('kpis');
 
         } catch (Exception $ex) {
             dd($ex);

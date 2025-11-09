@@ -82,6 +82,34 @@
 <script src="{{asset('vendor/datatables/dataTables.bootstrap4.js')}}"></script>
 <script src="{{asset('vendor/datatables/jquery.dataTables.js')}}"></script>
 
+
+
+<!-- ✅ jQuery (required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- ✅ Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Toastr session messages -->
+<script>
+    @if(session('success'))
+    toastr.success("{{ session('success') }}");
+    @endif
+
+    @if(session('error'))
+    toastr.error("{{ session('error') }}");
+    @endif
+
+    @if(session('warning'))
+    toastr.warning("{{ session('warning') }}");
+    @endif
+
+    @if(session('info'))
+    toastr.info("{{ session('info') }}");
+    @endif
+</script>
 @yield('script')
 
 </body>

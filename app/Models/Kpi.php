@@ -31,4 +31,16 @@ use SoftDeletes;
     public function evaluation(){
         return $this->hasMany(EmployeeKpiEvaluation::class,'kpi_id');
     }
+    public function positions()
+    {
+        return $this->belongsToMany(Position::class, 'position_kpis')
+            ->using(PositionKPI::class)
+            ->withPivot(['target', 'weight', 'is_finalized'])
+            ->withTimestamps();
+    }
+
+    public function positionKpis()
+    {
+        return $this->hasMany(PositionKPI::class, 'kpi_id');
+    }
 }

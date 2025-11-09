@@ -79,6 +79,11 @@ class Employee extends Model
         return $this->hasMany(Evaluation::class, 'employee_id')
             ->where('position_id', $position_id)->first();
     }
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'employee_id');
+    }
+
 
 
 }

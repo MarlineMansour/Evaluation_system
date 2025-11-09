@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KpiController;
+use App\Http\Controllers\UserController;
 use App\Jobs\CreateEvaluationJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/show_my_eval', [EmployeeController::class, 'myevaluation'])->name('myEval');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/my_profile',[UserController::class,'getProfile'])->name('profile');
+
+    //change password
+    Route::get('/change_password_request',[AuthController::class,'getView'])->name('change_password_request');
+    Route::match(['get','post'],'/store_new_password',[AuthController::class,'storePassword'])->name('store_new_password');
 });
 
 

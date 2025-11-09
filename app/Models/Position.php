@@ -39,5 +39,18 @@ class Position extends Model
         return $this->hasMany(Evaluation::class,'position_id');
      }
 
+    public function kpis()
+    {
+        return $this->belongsToMany(Kpi::class, 'position_kpis')
+            ->using(PositionKPI::class)
+            ->withPivot(['target', 'weight', 'is_finalized'])
+            ->withTimestamps();
+    }
+
+    public function positionKpis()
+    {
+        return $this->hasMany(PositionKPI::class, 'position_id');
+    }
+
 
 }

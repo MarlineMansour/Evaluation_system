@@ -43,7 +43,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th><span>Employee <br> (Position)</span></th>
-                                <th>Target_is_set</th>
+{{--                                <th>Target</th>--}}
                                 <th>KPis_Score</th>
                                 <th>Competencies_Score</th>
                                 <th>Manager</th>
@@ -76,8 +76,8 @@
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                     {data: 'Employee', name: 'Employee'},
-                    {data: 'Target_is_set', name: 'Target_is_set'},
-                    {data: 'KPis Score', name: 'KPis Score'},
+                    // {data: 'Target', name: 'Target'},
+                    {data: 'KPIs_Score', name: 'KPIs_Score'},
                     {data: 'Competencies_Score', name: 'Competencies_Score'},
                     {data: 'Manager', name: 'Manager'},
                     {data: 'is_finalized', name: 'is_finalized'},

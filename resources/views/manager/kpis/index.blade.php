@@ -6,9 +6,9 @@
 
         <!-- Modal -->
         @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
+           <script>
+                toastr.success("{{ session('success') }}");
+           </script>
         @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -107,10 +107,10 @@
                 $('.weight').each(function() {
                     let maxAllowed = 100 - total;
 
-                    // Get the current value
+
                     let currentVal = parseFloat($(this).val()) || 0;
 
-                    // If current value exceeds maxAllowed, set it to maxAllowed
+
                     if (currentVal > maxAllowed) {
                         $(this).val(maxAllowed.toFixed(2));
                         total += maxAllowed;
@@ -121,7 +121,14 @@
                     });
 
                     if (total > 100) {
-                        alert('Total weight must not exceed 100');
+                        Swal.fire({
+                            title: 'Oops!',
+                            text:'Total weight must not exceed 100',
+                            icon:'error',
+                            confirmButtonText: 'Got it!',
+                            confirmButtonColor: '#d33',
+                            width:400
+                        });
                     }
 
             }
@@ -135,7 +142,15 @@
 
                 if (total !== 100) {
                     e.preventDefault();
-                    alert('Total weight must be exactly 100 to submit.');
+                    Swal.fire({
+                        title: 'Oops!',
+                        text:'Total weight must be exactly 100 to submit.',
+                        icon:'error',
+                        confirmButtonText: 'Got it!',
+                        confirmButtonColor: '#d33',
+                        width:400
+                    });
+
                 }
 
 
