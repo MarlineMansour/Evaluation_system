@@ -34,7 +34,7 @@
             <span>KPIs Target & Weight</span>
         </a>
         <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-primary py-2 collapse-inner rounded" >
                 {{--                <h6 class="collapse-header">Custom Components:</h6>--}}
                 <a class="collapse-item" href="{{route('fetch_kpis')}}">All Kpis </a>
                 <a class="collapse-item" href="{{route('kpis')}}">Set Targets and Weights</a>
@@ -48,11 +48,10 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
-            {{--            <i class="fas fa-fw fa-cog"></i>--}}
             <span>Evaluate</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
+            <div class="bg-primary py-2 collapse-inner rounded" >
                 {{--                <h6 class="collapse-header">Custom Components:</h6>--}}
                 <a class="collapse-item" href="{{route('fetch_evaluations')}}">All Evaluations</a>
                 <a class="collapse-item" href="{{route('evaluate')}}">Create Evaluation</a>
@@ -66,6 +65,19 @@
             <span>My Evaluation</span></a>
     </li>
 
+    <hr class="sidebar-divider">
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+           aria-expanded="true" aria-controls="collapseThree">
+            <span>Role & Permissions</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class=" bg-primary py-2 collapse-inner rounded"  >
+                <a class="collapse-item" href="{{route('get_permissions')}}">Permissions</a>
+                <a class="collapse-item" href="{{route('get_roles')}}">Roles</a>
+            </div>
+        </div>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

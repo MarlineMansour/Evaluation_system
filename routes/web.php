@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KpiController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Jobs\CreateEvaluationJob;
 use Illuminate\Support\Facades\Auth;
@@ -56,8 +58,26 @@ Route::middleware('auth')->group(function () {
     //change password
     Route::get('/change_password_request',[AuthController::class,'getView'])->name('change_password_request');
     Route::match(['get','post'],'/store_new_password',[AuthController::class,'storePassword'])->name('store_new_password');
-});
 
+
+
+    //permissions
+    Route::get('/get_permissions',[PermissionController::class,'index'])->name('get_permissions');
+    Route::get('/show_permission/{id}',[PermissionController::class,'getPermission'])->name('show_permission');
+    Route::get('/get_all_permissions',[PermissionController::class,'getAll'])->name("get_all_permissions");
+    Route::post('/create_permission',[PermissionController::class,'create'])->name('create_permission');
+    Route::match(['get','post'],'/update_permission',[PermissionController::class,'update'])->name('update_permission');
+    //delete route
+
+
+    //Roles
+    Route::get('/get_roles',[RoleController::class,'index'])->name('get_roles');
+    Route::get('/get_all_roles',[RoleController::class,'getAll'])->name("get_all_roles");
+    Route::get('/show_role/{id}',[RoleController::class,'get'])->name('show_role');
+    Route::post('/create_role',[RoleController::class,'create'])->name('create_role');
+    Route::match(['get','post'],'/update_role',[RoleController::class,'update'])->name('update_role');
+
+});
 
 
 

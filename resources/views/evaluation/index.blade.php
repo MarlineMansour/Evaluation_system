@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title','All Kpis')
+@section('title','All Evaluations')
 @section('style')
     <style>
         #dataTable {
@@ -76,7 +76,6 @@
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                     {data: 'Employee', name: 'Employee'},
-                    // {data: 'Target', name: 'Target'},
                     {data: 'KPIs_Score', name: 'KPIs_Score'},
                     {data: 'Competencies_Score', name: 'Competencies_Score'},
                     {data: 'Manager', name: 'Manager'},

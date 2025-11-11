@@ -6,10 +6,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+//use Spatie\Permission\Traits\HasRoles;
+
 
 class Position extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes ;
 
     protected $fillable = [
         'name_en',
@@ -21,7 +23,7 @@ class Position extends Model
         'updated_by',
         'deleted_by',
         ];
-
+//    protected $guard_name = 'web';
     public function createdBy(){
         return $this->belongsTo(User::class);
     }
