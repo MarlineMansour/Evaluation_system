@@ -26,6 +26,16 @@
         {
             color:black;
         }
+        #dataTable tbody tr:hover {
+            background-color: #f3f3f3; /* light primary color */
+        }
+
+        /* Active row effect */
+        #dataTable tbody tr.active-row {
+            background-color: #2f83dd; /* primary color */
+            color: white; /* optional for text contrast */
+        }
+
 
     </style>
 @endsection
@@ -37,17 +47,16 @@
             <div class="card-body">
                 <div class="table-responsive">
 
-                    <div id="positionKpis">
+                    <div id="evaluation">
                         <table class="table table-bordered" id="dataTable">
                             <thead>
                             <tr>
                                 <th>ID</th>
                                 <th><span>Employee <br> (Position)</span></th>
-{{--                                <th>Target</th>--}}
                                 <th>KPis_Score</th>
                                 <th>Competencies_Score</th>
                                 <th>Manager</th>
-                                <th>is_finalized</th>
+                                <th>Submitted</th>
 
                             </tr>
                             </thead>
@@ -70,6 +79,7 @@
         $(document).ready(function () {
 
             $('#dataTable').DataTable({
+                searching:false,
                 processing: true,
                 serverSide: true,
                 ajax: '{{route('all_evaluations')}}',
@@ -79,9 +89,26 @@
                     {data: 'KPIs_Score', name: 'KPIs_Score'},
                     {data: 'Competencies_Score', name: 'Competencies_Score'},
                     {data: 'Manager', name: 'Manager'},
-                    {data: 'is_finalized', name: 'is_finalized'},
+                    {data: 'Submitted', name: 'Submitted'},
 
-                ]
+                ],
+                rowCallback: function(row,employee){
+                    $(row).attr('data_id',employee.id);
+                    $(row).off('click').on('click',function(){
+                        $('#dataTable tbody tr').removeClass('active-row');
+                        $(this).addClass('active-row');
+                    });
+
+                    $(row).dblclick(function(){
+                       var employeeID = $(this).data('employee');
+                       console.log(employeeID);
+                       var positionID =$(this).data('position');
+                       console.log(positionID);
+                       var url = '{{ route("show_emp") }}' + '?employee='+ employeeID + '&position=' + positionID;
+                       window.location.href=url;
+
+                    });
+                }
                 // createdRow: function (row, data, dataIndex) {
                 //     if (data.is_finalized === 'Yes') {
                 //         $(row).css('background-color', '#bbf5bd');

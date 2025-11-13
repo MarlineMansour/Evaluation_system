@@ -116,7 +116,7 @@
                     {data: 'Created_By', name: 'Created_By'},
                 ],
 
-                rowCallback: function (row, permissions, index) {
+                rowCallback: function (row, permissions) {
                     $(row).attr('data-id', permissions.id);
                     $(row).off('click').on('click', function () {
                         $('#dataTable tbody tr').removeClass('active-row');

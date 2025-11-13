@@ -130,9 +130,7 @@
                         url = url.replace(':id', data);
                         window.open(url);
 
-
                     });
-
 
                 }
 

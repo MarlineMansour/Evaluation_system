@@ -1,6 +1,6 @@
 
 @extends('layout.master')
-@section('title','Permission')
+@section('title','Role')
 @section('content')
     <div class="card container">
 
@@ -11,7 +11,7 @@
                         <button class="btn btn-outline-info" id="edit">Edit</button>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-outline-danger">Delete</button>
+                        <button class="btn btn-outline-danger" id="delete">Delete</button>
                     </div>
                 </div>
             </div>
@@ -21,13 +21,13 @@
                     <div>
                         <div id="showPermission" class="row">
                             <div class="col-6">
-                                <input hidden value="{{$permission->id}}" name="id">
-                                <label for="permission" class="text-primary">Permission</label>
-                                <input class="form-control" id="permission" readonly value="{{$permission->name}}" name="name">
+                                <input hidden value="{{$role->id}}" name="id">
+                                <label for="role" class="text-primary">Role</label>
+                                <input class="form-control" id="role" readonly value="{{$role->name}}" name="name">
                             </div>
                             <div class="col-6">
                                 <label for="creator" class="text-primary">Created By</label>
-                                <input class="form-control" id="creator" type="text" readonly value="{{$permission->creator->employee->name_en}}">
+                                <input class="form-control" id="creator" type="text" readonly value="{{$role->creator->employee->name_en ?? '-'}}">
                             </div>
 
                         </div>
@@ -50,9 +50,10 @@
         $(document).ready(function(){
             $('#edit').click(function(){
 
-                $('#permission').prop('readonly',false);
+                $('#role').prop('readonly',false);
                 $('#submit').prop('disabled',false).removeClass('disabled');
             });
+
         });
     </script>
 @endsection

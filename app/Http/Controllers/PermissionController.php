@@ -12,7 +12,7 @@ class PermissionController extends Controller
 {
   public function index()
   {
-        return view('permissions.index');
+        return view('roles&permissions.permissions.index');
   }
 
   public function getAll(Request $request){
@@ -39,14 +39,8 @@ class PermissionController extends Controller
   public function getPermission($id){
         $permission = Permission::where('id',$id)->with('creator.employee')->first();
 //        dd($permission);
-        return view('permissions.show',compact('permission'));
+        return view('roles&permissions.permissions.show',compact('permission'));
     }
-
-//  public function edit(Request $request)
-//  {
-//      $permission_name=Permission::where('id',$request->id)->pluck('name')->first();
-//          return  response()->json(['permission_name'=>$permission_name]);
-//  }
 
   public function update(Request $request)
   {
@@ -60,11 +54,11 @@ class PermissionController extends Controller
       return redirect()->route('get_permissions');
   }
 
-  public function destroy()
-  {
-      Permission::with('id',)->delete();
-      toast('success','Permission is deleted successfully');
-      return back();
-  }
+//  public function destroy()
+//  {
+//      Permission::with('id',)->delete();
+//      toast('success','Permission is deleted successfully');
+//      return back();
+//  }
 
 }

@@ -195,13 +195,21 @@ class EvaluationController extends Controller
         })
 
             // Finalized status for each evaluation
-            ->editColumn('is_finalized', function ($employee) {
+            ->editColumn('Submitted', function ($employee) {
                 return $employee->evaluations->map(fn($eval) => $eval->is_finalized ?
-                    '<span class="badge bg-success">Yes</span>'
-                    :'<span class="badge bg-danger">No</span>')->implode('<br>');
+                    '<span class="badge bg-success rounded-circle text-white">yes</span>'
+                    :'<span class="badge bg-danger rounded-circle text-white">No</span>')->implode('<br>');
             })
-            ->rawColumns(['Employee', 'Target','KPIs_Score','Competencies_Score', 'Manager', 'is_finalized'])
+            ->addRowAttr('data-employee', fn($employee)=> $employee->id)
+            ->addRowAttr('data-position',fn($employee)=>$employee->position->id)
+
+            ->rawColumns(['Employee', 'Target','KPIs_Score','Competencies_Score', 'Manager', 'Submitted'])
             ->make('true');
+    }
+
+    public function show(Request $request){
+
+        return view('evaluation.show_emp');
     }
 }
 

@@ -36,17 +36,20 @@ Route::middleware('auth')->group(function () {
     Route::match(['get', 'post'], '/list_kpis', [KpiController::class, 'getKpis'])->name('list_kpis');
     Route::post('/store_position_kpi', [KpiController::class, 'storePositionKpi'])->name('store_position_kpi');
 
+
     Route::get('/fetch_kpis', [KpiController::class, 'fetchKpis'])->name('fetch_kpis');
     Route::match(['get', 'post'], '/all_kpis', [KpiController::class, 'getAllKpis'])->name('all_kpis');
-
+    Route::get('/show_kpi',[KpiController::class,'show'])->name('show_kpi');
 
     //evaluation
     Route::get('/evaluate', [EvaluationController::class, 'index'])->name('evaluate');
     Route::match(['get', 'post'], '/list_emp_kpi', [EvaluationController::class, 'empKpisAndComptencies'])->name('list_emp_kpi');
     Route::post('/store_emp_eval', [EvaluationController::class, 'storeEmpEval'])->name('store_emp_eval');
 
+
     Route::get('/fetch_evaluations',[EvaluationController::class, 'fetchEvaluations'])->name('fetch_evaluations');
     Route::match(['get', 'post'], '/all_evaluations', [EvaluationController::class, 'getAllEvaluations'])->name('all_evaluations');
+    Route::get('/show_emp',[EvaluationController::class,'show'])->name('show_emp');
 //    Route::get('/create_emp_eval_row',function (){
 //        CreateEvaluationJob::dispatch(Auth::id());
 //    });

@@ -11,8 +11,9 @@ class RoleController extends Controller
 {
   public function index()
   {
-      return view('roles.index');
+      return view('roles&permissions.roles.index');
   }
+
   public function getAll(Request $request){
      $roles = Role::with('creator.employee')->get();
 
@@ -35,9 +36,10 @@ class RoleController extends Controller
 
   }
 
-  public function get(Request $request){
-     $role= Role::with('id',$request->id)->first();
-     return view('roles.show',compact('role'));
+  public function get($id){
+     $role= Role::where('id',$id)->with('creator.employee')->first();
+//     dd($role);
+     return view('roles&permissions.roles.show',compact('role'));
   }
 
 
@@ -49,6 +51,14 @@ class RoleController extends Controller
 
       toast('success','Role is updated successfully');
       return redirect()->route('get_roles');
+  }
+
+  public function destroy(){
+
+  }
+
+  public function assignTo(){
+
   }
 
 }

@@ -1,3 +1,8 @@
+<style>
+    .collapse-item:hover{
+        color: black !important;
+    }
+</style>
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
@@ -36,8 +41,8 @@
         <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-primary py-2 collapse-inner rounded" >
                 {{--                <h6 class="collapse-header">Custom Components:</h6>--}}
-                <a class="collapse-item" href="{{route('fetch_kpis')}}">All Kpis </a>
-                <a class="collapse-item" href="{{route('kpis')}}">Set Targets and Weights</a>
+                <a class="collapse-item text-white" href="{{route('fetch_kpis')}}">All Kpis </a>
+                <a class="collapse-item text-white" href="{{route('kpis')}}">Set Targets and Weights</a>
             </div>
         </div>
     </li>
@@ -53,8 +58,8 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-primary py-2 collapse-inner rounded" >
                 {{--                <h6 class="collapse-header">Custom Components:</h6>--}}
-                <a class="collapse-item" href="{{route('fetch_evaluations')}}">All Evaluations</a>
-                <a class="collapse-item" href="{{route('evaluate')}}">Create Evaluation</a>
+                <a class="collapse-item text-white" href="{{route('fetch_evaluations')}}">All Evaluations</a>
+                <a class="collapse-item text-white" href="{{route('evaluate')}}">Create Evaluation</a>
             </div>
         </div>
     </li>
@@ -72,9 +77,9 @@
             <span>Role & Permissions</span>
         </a>
         <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class=" bg-primary py-2 collapse-inner rounded"  >
-                <a class="collapse-item" href="{{route('get_permissions')}}">Permissions</a>
-                <a class="collapse-item" href="{{route('get_roles')}}">Roles</a>
+            <div class=" bg-primary py-2 collapse-inner rounded "  >
+                <a class="collapse-item text-white" href="{{route('get_permissions')}}">Permissions</a>
+                <a class="collapse-item text-white" href="{{route('get_roles')}}">Roles</a>
             </div>
         </div>
     </li>

@@ -20,7 +20,7 @@ class KpiController extends Controller
         $manager_id = Employee::query()->where('user_id', Auth::id())->value('id');
         $employees = Employee::where('manager_id', $manager_id)->get();
         $position_ids = $employees->pluck('position_id')->unique();
-        $positions = Position::whereIn('id', $position_ids)->where('type', ' KPIs & Competencies')->pluck('name_en', 'id');
+        $positions = Position::whereIn('id', $position_ids)->where('is_white', '1')->pluck('name_en', 'id');
         return view('manager.kpis.index', compact('positions'));
     }
 
@@ -136,33 +136,64 @@ class KpiController extends Controller
     public function getAllKpis(Request $request)
     {
 
-        $data = PositionKPI::with(['KPIs', 'pos', 'creator.employee'])->get();
+        $data = PositionKPI::select('position_id', 'created_by')->distinct()->groupBy('position_id', 'created_by')->get();
+
 //dd($data);
         return DataTables::of($data)
             ->addIndexColumn()
-            ->editColumn('Kpi', fn($data) => $data->KPIs->name_en ?? '-')
             ->editColumn('Position', fn($data) => $data->pos->name_en ?? '-')
             ->editColumn('Target is set', function($data){
-                return $data->target
+                $kpis = PositionKPI::where('created_by', $data->created_by)
+                    ->where('position_id', $data->position_id)
+                    ->get();
+
+                $allTargetsSet =$kpis->every(fn($kpi) => !is_null($kpi->target));
+                $allFinal = $kpis->every(fn($kpi) => $kpi->is_finalized == 1);
+                return ($allTargetsSet && $allFinal)
                 ? '<span class="badge bg-success">Yes</span>'
                 : '<span class="badge bg-danger">No</span>';
-
 
              })
             ->editColumn('Weight is set', function($data){
-                return $data->weight
+                $kpis = PositionKPI::where('created_by', $data->created_by)
+                    ->where('position_id', $data->position_id)
+                    ->get();
+
+                $allWeightsSet =$kpis->every(fn($kpi) => !is_null($kpi->weight));
+                $allFinal = $kpis->every(fn($kpi) => $kpi->is_finalized == 1);
+
+                return ($allWeightsSet && $allFinal)
                     ? '<span class="badge bg-success">Yes</span>'
                     : '<span class="badge bg-danger">No</span>';
             })
-            ->editColumn('Manager', fn($data) => $data->creator->employee->name_en)
-            ->editColumn('is_finalized', function($data){
-                return $data->is_finalized == 1
+            ->editColumn('Manager', fn($data) => $data->creator->employee->name_en ?? '-')
+
+            ->editColumn('Submitted', function($data){
+                $kpis = PositionKPI::where('created_by', $data->created_by)
+                    ->where('position_id', $data->position_id)
+                    ->get();
+                $allFinal =$kpis->every(fn($kpi) => $kpi->is_finalized == 1);
+                return ($allFinal)
                 ? '<span class="badge bg-success">Yes</span>'
                 : '<span class="badge bg-danger">No</span>';
             })
-            ->rawColumns(['Target is set', 'Weight is set', 'is_finalized'])
+            ->addRowAttr('data-position' ,fn($data) => $data->position_id)
+            ->addRowAttr( 'data-manager' , fn($data) => $data->created_by)
+            ->rawColumns(['Target is set', 'Weight is set', 'Submitted'])
+
             ->make(true);
 
+    }
+
+    public function show(Request $request ){
+//        dd($request);
+        $positionID = $request->query('position');
+        $managerID = $request->query('manager');
+        $kpis=PositionKPI::where('position_id',$positionID)->where('created_by',$managerID)->with('KPIs')->get();
+//        dd($request,$positionID,$managerID,$kpis);
+            $allFinalized =$kpis->every(fn($kpi)=> $kpi->is_finalized);
+//            dd($allFinalized);
+        return view('kpi.show_kpis',compact('kpis','allFinalized'));
     }
 
 }
