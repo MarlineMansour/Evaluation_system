@@ -42,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/show_kpi',[KpiController::class,'show'])->name('show_kpi');
 
     //evaluation
-    Route::get('/evaluate', [EvaluationController::class, 'index'])->name('evaluate');
+    Route::match(['get', 'post'],'/evaluate', [EvaluationController::class, 'index'])->name('evaluate');
     Route::match(['get', 'post'], '/list_emp_kpi', [EvaluationController::class, 'empKpisAndComptencies'])->name('list_emp_kpi');
     Route::post('/store_emp_eval', [EvaluationController::class, 'storeEmpEval'])->name('store_emp_eval');
 
@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/fetch_evaluations',[EvaluationController::class, 'fetchEvaluations'])->name('fetch_evaluations');
     Route::match(['get', 'post'], '/all_evaluations', [EvaluationController::class, 'getAllEvaluations'])->name('all_evaluations');
     Route::get('/show_emp',[EvaluationController::class,'show'])->name('show_emp');
+
 //    Route::get('/create_emp_eval_row',function (){
 //        CreateEvaluationJob::dispatch(Auth::id());
 //    });

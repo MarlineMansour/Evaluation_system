@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\employeeCompetencyEvaluation;
 use App\Models\employeeKpiEvaluation;
 use App\Models\Evaluation;
+use App\Models\Position;
 use App\Models\PositionKPI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,10 +18,17 @@ use Yajra\DataTables\Facades\DataTables;
 
 class EvaluationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $manager_id = Employee::query()->where('user_id', Auth::id())->value('id');
         $employees = Employee::where('manager_id', $manager_id)->get();
+
+        $exists = $employees->contains('id', $request->employee_id);
+
+        if($exists ){
+            toast('error','this employee does not exist');
+            return back();
+        }
         return view('manager.evaluation.index', compact('employees'));
     }
 
@@ -30,7 +38,7 @@ class EvaluationController extends Controller
         $employee = Employee::with(['position', 'compEvaluation', 'kpiEvaluation'])->where('id', $request->id)->first();
 //       dd($employee);
         $data['employee'] = $employee;
-        if ($employee->position->type === " KPIs & Competencies") {
+        if ($employee->position->is_white == 1) {
             $data['position_kpis'] = PositionKPI::where('position_id', $employee->position->id)
                 ->whereNotNull('target')
                 ->where('created_by', Auth::id())
@@ -79,7 +87,7 @@ class EvaluationController extends Controller
                         !isset($request['score'][$i]) ||
                         !isset($request['weighted_score'][$i])
                     ) {
-                        dd($request);
+//                        dd($request);
                         continue;
                     }
                     $kpiId = $request['kpis'][$i];
@@ -183,7 +191,10 @@ class EvaluationController extends Controller
 //            })
 
             ->editColumn('KPIs_Score', function ($employee) {
-                return $employee->evaluations->map(fn($eval) => $eval->kpis_score)->implode('<br>') ?: '-';
+                if($employee->position->is_white == 1){
+                    return $employee->evaluations->map(fn($eval) => $eval->kpis_score)->implode('<br>') ?: '-';
+                }
+                return 'N/A';
             })
 
             // All Competencies scores
@@ -202,14 +213,52 @@ class EvaluationController extends Controller
             })
             ->addRowAttr('data-employee', fn($employee)=> $employee->id)
             ->addRowAttr('data-position',fn($employee)=>$employee->position->id)
-
+            ->addRowAttr('data-manager',function($employee){
+                $eval=$employee->evaluations
+                    ->where('position_id',$employee->position->id)
+                    ->sortByDesc('created_at')
+                    ->first();
+                return $eval->created_by;
+            })
             ->rawColumns(['Employee', 'Target','KPIs_Score','Competencies_Score', 'Manager', 'Submitted'])
             ->make('true');
     }
 
     public function show(Request $request){
+//dd($request);
+    $data['kpiEvaluation']=employeeKpiEvaluation::with(['kpi.positionKpis' => function($query) use ($request){
+        $query->where('position_id',$request->position);
+      }])
+    ->where('employee_id', $request->employee)
+    ->where('created_by',$request->manager)
+    ->get();
+//        dd($data['kpiEvaluation']);
+$is_white=Position::where('id',$request->position)->value('is_white');
+//dd($is_white);
+$data['competencyEvaluation']=employeeCompetencyEvaluation::with('competency')
+    ->where('employee_id',$request->employee)
+    ->where('created_by',$request->manager)
+    ->get();
 
-        return view('evaluation.show_emp');
+        $employee = Employee::with(['kpiEvaluation.createdBy','compEvaluation','position','manager'])
+            ->where('id',$request->employee)
+            ->where('position_id',$request->position)
+            ->first();
+//        dd($employee);
+        $allKpisFinalized = $employee->kpiEvaluation->every(fn($item) => $item->is_finalized);
+        $allCompFinalized = $employee->compEvaluation->every(fn($item) => $item->is_finalized);
+        $manager=$employee->manager->user_id;
+//        dd( $manager);
+        return view('evaluation.show_emp',[
+            'kpis_eval' => $data['kpiEvaluation'],
+            'competencies'=>$data['competencyEvaluation'],
+            'is_white'=>$is_white,
+            'allKpisFinalized'=> $allKpisFinalized,
+            'allCompFinalized' =>$allCompFinalized,
+            'manager'=>$manager,
+            'user'=>Auth::id(),
+            'employee'=>$employee
+            ]);
     }
 }
 

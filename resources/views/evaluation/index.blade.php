@@ -104,7 +104,8 @@
                        console.log(employeeID);
                        var positionID =$(this).data('position');
                        console.log(positionID);
-                       var url = '{{ route("show_emp") }}' + '?employee='+ employeeID + '&position=' + positionID;
+                       var managerID = $(this).data('manager');
+                       var url = '{{ route("show_emp") }}' + '?employee='+ employeeID + '&position=' + positionID + '&manager=' + managerID ;
                        window.location.href=url;
 
                     });

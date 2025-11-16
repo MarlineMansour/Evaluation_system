@@ -18,7 +18,7 @@
              <select name="employee_id" class="employees form-control p-2">
                     <option value="" selected disabled>Choose Employee</option>
                     @foreach($employees as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->name_en }}</option>
+                        <option value="{{ $employee->id }} >{{ $employee->name_en }}</option>
                     @endforeach
                 </select>
             </div>
