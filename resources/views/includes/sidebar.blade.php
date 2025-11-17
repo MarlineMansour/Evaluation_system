@@ -65,12 +65,6 @@
     </li>
 
     <hr class="sidebar-divider">
-    <li class="nav-item active">
-        <a class="nav-link" href="{{route('myEval')}}">
-            <span>My Evaluation</span></a>
-    </li>
-
-    <hr class="sidebar-divider">
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
            aria-expanded="true" aria-controls="collapseThree">
@@ -82,6 +76,12 @@
                 <a class="collapse-item text-white" href="{{route('get_roles')}}">Roles</a>
             </div>
         </div>
+    </li>
+
+    <hr class="sidebar-divider">
+    <li class="nav-item active">
+        <a class="nav-link" href="{{route('myEval')}}">
+            <span>My Evaluation</span></a>
     </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

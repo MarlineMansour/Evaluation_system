@@ -61,6 +61,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Permission</th>
+                                <th>Permission Group</th>
                                 <th>Created_By</th>
                             </tr>
                             </thead>
@@ -86,8 +87,20 @@
                         @csrf
                         <div data-mdb-input-init class="form-outline mb-4">
                             <label class="form-label" for="name">Name</label>
-                            <input type="text" id="name" class="form-control form-control-lg" required name="name"/>
+                            <input type="text" id="name" class="form-control form-control-md" required name="name"/>
                         </div>
+                        <div class="row">
+                            <label class="form-label col-8" for="group">Permission Group </label>
+                            <select class="form-select form-outline col-6 mx-2" id="group" name="group_id">
+                                <option value="" disabled selected>Choose Group</option>
+                                @foreach($group_names as $group_name)
+                                    <option value="{{$group_name->id}}" >{{$group_name->name}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
+
                         <div class="row">
                             <div  class="col-7"></div>
                             <button type="submit" class="btn btn-outline-primary col-4">Submit</button>
@@ -113,6 +126,7 @@
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                     {data: 'Permission', name: 'Permission'},
+                    {data:'Permission_Group',name:'Permission_Group'},
                     {data: 'Created_By', name: 'Created_By'},
                 ],
 
@@ -127,7 +141,7 @@
                         var data = $(this).attr('data-id');
                         var url = '{{route("show_permission",":id")}}';
                         url = url.replace(':id', data);
-                        window.open(url);
+                        window.location.href=url;
 
 
                     });

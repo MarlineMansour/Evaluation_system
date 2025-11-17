@@ -72,32 +72,32 @@
         </div>
 
     </div>
-    <div class="modal hide" id="Modal_create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New Role</h5>
-                    <button type="button" class="btn-close closeModel1" data-bs-dismiss="modal" aria-label="Close">
-                        <i class="fa-close"></i>
-                    </button>
-                </div>
-                <div class="modal-body" id="create_model_role">
-                    <form action="{{route('create_role')}}" method="post">
-                        @csrf
-                        <div data-mdb-input-init class="form-outline mb-4">
-                            <label class="form-label" for="name">Name</label>
-                            <input type="text" id="name" class="form-control form-control-lg" required name="name"/>
-                        </div>
-                        <div class="row">
-                            <div  class="col-7"></div>
-                            <button type="submit" class="btn btn-outline-primary col-4">Submit</button>
-                        </div>
-                    </form>
-                </div>
+{{--    <div class="modal hide" id="Modal_create" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">--}}
+{{--        <div class="modal-dialog">--}}
+{{--            <div class="modal-content">--}}
+{{--                <div class="modal-header">--}}
+{{--                    <h5 class="modal-title" id="exampleModalLabel">New Role</h5>--}}
+{{--                    <button type="button" class="btn-close closeModel1" data-bs-dismiss="modal" aria-label="Close">--}}
+{{--                        <i class="fa-close"></i>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="modal-body" id="create_model_role">--}}
+{{--                    <form action="{{route('create_role')}}" method="post">--}}
+{{--                        @csrf--}}
+{{--                        <div data-mdb-input-init class="form-outline mb-4">--}}
+{{--                            <label class="form-label" for="name">Name</label>--}}
+{{--                            <input type="text" id="name" class="form-control form-control-lg" required name="name"/>--}}
+{{--                        </div>--}}
+{{--                        <div class="row">--}}
+{{--                            <div  class="col-7"></div>--}}
+{{--                            <button type="submit" class="btn btn-outline-primary col-4">Submit</button>--}}
+{{--                        </div>--}}
+{{--                    </form>--}}
+{{--                </div>--}}
 
-            </div>
-        </div>
-    </div>
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 @endsection
 @section('script')
 
@@ -128,7 +128,7 @@
                         var data = $(this).attr('data-id');
                         var url = '{{route("show_role",":id")}}';
                         url = url.replace(':id', data);
-                        window.open(url);
+                        window.location.href=url;
 
                     });
 
@@ -137,7 +137,12 @@
             });
 
             $('#create').on('click', function () {
-                $('#Modal_create').show();
+               $.ajax({
+                   url:'{{route('show_all')}}',
+                   success:function(response){
+                       window.location.href = "{{ route('show_all') }}";
+                   }
+               });
             })
             $('.closeModel1').on('click', function () {
                 $('#Modal_create').hide();

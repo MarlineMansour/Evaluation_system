@@ -14,11 +14,15 @@ use Spatie\Permission\Models\Permission as SpatiePermission;
         'created_by',
         'updated_by',
         'deleted_by',
+        'permission_group_id'
     ];
 
     public function creator()
     {
         return $this->belongsTo(User::class,'created_by');
+    }
+    public function group(){
+        return $this->belongsTo(PermissionGroup::class,'permission_group_id');
     }
 
 

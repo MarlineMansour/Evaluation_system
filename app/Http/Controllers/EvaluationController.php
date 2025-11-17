@@ -22,14 +22,9 @@ class EvaluationController extends Controller
     {
         $manager_id = Employee::query()->where('user_id', Auth::id())->value('id');
         $employees = Employee::where('manager_id', $manager_id)->get();
-
-        $exists = $employees->contains('id', $request->employee_id);
-
-        if($exists ){
-            toast('error','this employee does not exist');
-            return back();
-        }
-        return view('manager.evaluation.index', compact('employees'));
+        $requestedID=$request->employee_id;
+//        $requestedName =Employee::where('id',$request->employee_id)->value('name_en');
+        return view('manager.evaluation.index', compact('employees','requestedID'));
     }
 
     public function empKpisAndComptencies(Request $request)
@@ -232,7 +227,7 @@ class EvaluationController extends Controller
     ->where('employee_id', $request->employee)
     ->where('created_by',$request->manager)
     ->get();
-//        dd($data['kpiEvaluation']);
+//        dd($request,$data['kpiEvaluation']);
 $is_white=Position::where('id',$request->position)->value('is_white');
 //dd($is_white);
 $data['competencyEvaluation']=employeeCompetencyEvaluation::with('competency')

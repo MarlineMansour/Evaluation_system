@@ -9,14 +9,18 @@
         <div class="card container">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <div class="row-cols-6">
-
-                        <select name="employee_id" class="employees form-control p-2">
-                            <option value="" selected disabled>Choose Role</option>
-                            @foreach()
-                                <option value="{{}}">{{  }}</option>
-                            @endforeach
-                        </select>
+                    <div class="row">
+                        <div class="col-6">
+                            <select name="role_id" class="role form-control p-2">
+                                <option value="" selected disabled>Choose Role</option>
+                                @foreach()
+                                    <option value="{{}}">{{  }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-outline-primary">Create</button>
+                        </div>
                     </div>
                 </div>
             </div>

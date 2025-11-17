@@ -15,12 +15,18 @@
           <div class="card-header py-3">
             <div class="row-cols-6">
 
+{{--                @if($requestedID && $requestedName)--}}
+{{--                    <select name="employee_id" class="employees form-control p-2">--}}
+{{--                            <option value="{{$requestedID}}" >{{ $requestedName }}</option>--}}
+{{--                    </select>--}}
+{{--                    @else--}}
              <select name="employee_id" class="employees form-control p-2">
                     <option value="" selected disabled>Choose Employee</option>
                     @foreach($employees as $employee)
-                        <option value="{{ $employee->id }} >{{ $employee->name_en }}</option>
+                        <option @if($requestedID && $employee->id == $requestedID) selected @endif value="{{ $employee->id}}" >{{ $employee->name_en }}</option>
                     @endforeach
                 </select>
+{{--                    @endif--}}
             </div>
          </div>
         </div>
@@ -76,47 +82,58 @@
 @section('script')
     <script>
         $(document).ready(function(){
+            var employee =$('.employees').val()
+            if(employee !== "" && employee !== null)
+            {
+                loadEmployeeData(employee);
+            }
             $('.employees').on('change', function(){
+                console.log('changeeee...');
                var employee_id  = $(this).val() ;
-               // console.log(employee_id);
+              loadEmployeeData(employee_id);
+
+            });
+
+            function loadEmployeeData(employee_id)
+            {
                 $('#dataTable').remove();
 
-               $.ajax({
-                   url:'{{route('list_emp_kpi')}}',
-                   method:'post',
-                   data:{
-                       _token:'{{csrf_token()}}',
+                $.ajax({
+                    url:'{{route('list_emp_kpi')}}',
+                    method:'post',
+                    data:{
+                        _token:'{{csrf_token()}}',
                         id:  employee_id,
-                   },
-                   beforeSend: function() {
-                       $('#employeeEval').html('<tr><td colspan="4">Loading KPIs...</td></tr>');
+                    },
+                    beforeSend: function() {
+                        $('#employeeEval').html('<tr><td colspan="4">Loading KPIs...</td></tr>');
 
-                   },
-                   success:function(response){
-                       $('#employeeEval').html(response.html);
-                       if(response.allFinalized){
+                    },
+                    success:function(response){
+                        $('#employeeEval').html(response.html);
+                        if(response.allFinalized){
 
-                           $('#submit_later').prop('disabled',true).addClass('disabled');
-                           $('#final_submit').prop('disabled',true).addClass('disabled');
-                           $('.score').prop('disabled',true).addClass('disabled');
-                           $('.weightedScore').prop('disabled',true).addClass('disabled');
-                           $('.compScore').prop('disabled',true).addClass('disabled');
-                       }
-                       else{
-                           $('#submit_later').prop('disabled',false).removeClass('disabled');
-                           $('#final_submit').prop('disabled',false).removeClass('disabled');
-                           $('.score').prop('disabled',false).removeClass('disabled');
-                           $('.weightedScore').prop('disabled',false).removeClass('disabled');
-                           $('.compScore').prop('disabled',false).removeClass('disabled');
-                       }
-                   },
-                   error: function(xhr) {
-                       console.error(xhr.responseText);
-                       $('#employeeEval').html('<tr><td colspan="4" class="text-danger">Error loading Data</td></tr>');
-                   }
+                            $('#submit_later').prop('disabled',true).addClass('disabled');
+                            $('#final_submit').prop('disabled',true).addClass('disabled');
+                            $('.score').prop('disabled',true).addClass('disabled');
+                            $('.weightedScore').prop('disabled',true).addClass('disabled');
+                            $('.compScore').prop('disabled',true).addClass('disabled');
+                        }
+                        else{
+                            $('#submit_later').prop('disabled',false).removeClass('disabled');
+                            $('#final_submit').prop('disabled',false).removeClass('disabled');
+                            $('.score').prop('disabled',false).removeClass('disabled');
+                            $('.weightedScore').prop('disabled',false).removeClass('disabled');
+                            $('.compScore').prop('disabled',false).removeClass('disabled');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        $('#employeeEval').html('<tr><td colspan="4" class="text-danger">Error loading Data</td></tr>');
+                    }
 
-               });
-            });
+                });
+            }
 
             $('body').on('input','.score', function(){
                 let row = $(this).closest('tr');

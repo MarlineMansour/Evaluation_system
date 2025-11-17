@@ -14,12 +14,12 @@
     </thead>
 
     <tbody>
-    @forelse($position_kpis as $eval)
+    @forelse($position_kpis as $index => $eval)
         @php
             $evaluation = $eval->KPIs->evaluation->first(); // get the first evaluation for this employee
         @endphp
         <tr>
-            <td>{{ $eval->KPIs->id }}</td>
+            <td>{{ $index+1 }}</td>
             <td>{{ $eval->KPIs->name_en }}</td>
             <td class="type">{{$eval->KPIs->is_linear==1 ? 'linear':'Inverted'}}</td>
             <td class="target">{{ $eval->target }}</td>
@@ -65,12 +65,12 @@
     </thead>
 
     <tbody>
-    @forelse($competencies as $comp)
+    @forelse($competencies as $key=>$comp)
         @php
             $score = optional($comp->evaluation->first())->score;
         @endphp
         <tr>
-            <td>{{ $comp->id }}</td>
+            <td>{{ $key+1 }}</td>
             <td>{{ $comp->name_en }}</td>
             <input type="hidden" name="competency_id[]" value="{{ $comp->id }}">
             <input type="hidden" name="emp_posiyion_id" value="{{$employee->position_id}}">

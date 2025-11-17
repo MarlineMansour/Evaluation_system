@@ -9,11 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 
 
-
-
 class Position extends Model
 {
-    use SoftDeletes ,  HasRoles ;
+    use SoftDeletes ,HasRoles;
 
     protected $fillable = [
         'name_en',
@@ -56,5 +54,14 @@ class Position extends Model
         return $this->hasMany(PositionKPI::class, 'position_id');
     }
 
+    public function employees()
+    {
+        return $this->hasMany(Employee::class,'position_id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 
 }

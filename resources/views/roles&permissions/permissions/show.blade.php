@@ -29,7 +29,15 @@
                                     <label for="creator" class="text-primary">Created By</label>
                                     <input class="form-control" id="creator" type="text" readonly value="{{$permission->creator->employee->name_en}}">
                                 </div>
-
+                            </div>
+                            <div class="my-4">
+                                <label class="text-primary" for="group">Permission Group </label>
+                                <select class="form-select form-outline m-2" disabled id="group" name="group_id">
+                                    <option value="" disabled selected>Choose Group</option>
+                                    @foreach($group_names as $group_name)
+                                        <option @if($permission->group?->id && $group_name->id == $permission->group->id)  selected @endif value="{{$group_name->id}}" >{{$group_name->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="row my-4">
                                 <div class="col-7"></div>

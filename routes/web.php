@@ -78,6 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/get_roles',[RoleController::class,'index'])->name('get_roles');
     Route::get('/get_all_roles',[RoleController::class,'getAll'])->name("get_all_roles");
     Route::get('/show_role/{id}',[RoleController::class,'get'])->name('show_role');
+    Route::get('/show_all',[RoleController::class,'showAll'])->name('show_all');
     Route::post('/create_role',[RoleController::class,'create'])->name('create_role');
     Route::match(['get','post'],'/update_role',[RoleController::class,'update'])->name('update_role');
 

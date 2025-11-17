@@ -95,7 +95,7 @@
                        }
                 },
                 error: function(xhr) {
-                    console.error(xhr.responseText);
+                    // console.error(xhr.responseText);
                     $('#kpiTableBody').html('<tr><td colspan="4" class="text-danger">Error loading KPIs</td></tr>');
                 }
 
