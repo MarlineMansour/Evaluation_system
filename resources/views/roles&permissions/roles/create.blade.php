@@ -6,19 +6,22 @@
             <form action="{{route('create_role')}}" method="post">
                 @csrf
                 <div class="card-header py-3">
-                    <div class="row-cols-6">
 
-                        <select class=" form-control p-2" required name="role_id">
-                            <option value="" selected disabled>Choose Role</option>
-                            @foreach($roles as $role)
-                                <option value="{{ $role->id }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
+                    <div class="row-cols-6">
+                      <label class="text-primary">
+                          Role Name
+                          <input name="role_name" class="form-control" required >
+                      </label>
                     </div>
+                    @error('role_name')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="card-body">
                     <div class="Card">
-
+                        @error('permissions')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
                         @foreach($group_permissions as $groupId => $groupPermissions)
                             <div class="card-body ">
 
@@ -60,8 +63,15 @@
         $(document).ready(function () {
             $('.form-group').on('change', function () {
                 let group_id = $(this).data('group');
-                $('.permission[data-group="' + group_id + '"]').prop('checked', $(this).is(':checked'));
+                $('.permission[data-group=' + group_id + ']').prop('checked', $(this).is(':checked'));
 
+            });
+
+            $('.permission').on('change',function(){
+                let group_id = $(this).data('group');
+                let allChecked =$('.permission[data-group="' + group_id + '"]').length ===
+                    $('.permission[data-group="' + group_id + '"]:checked').length;
+                $('.form-group[data-group='+ group_id+']').prop('checked',allChecked);
             });
         });
     </script>

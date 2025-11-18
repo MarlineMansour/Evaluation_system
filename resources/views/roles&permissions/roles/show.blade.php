@@ -11,7 +11,8 @@
                         <button class="btn btn-outline-info text-align-conter" id="edit">Edit</button>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-outline-danger" id="delete">Delete</button>
+                        <a  href="{{route('delete_role',$role->id)}}" class="btn btn-outline-danger" id="delete">Delete</a>
+
                     </div>
                 </div>
             </div>
@@ -34,7 +35,6 @@
                         <div class="my-4">
                             @foreach($group_permissions as $groupId => $groupPermissions)
                                 <div class="card-body ">
-
                                     @if($groupId)
                                         <div class="form-check">
                                             <label class="text-primary">
@@ -77,11 +77,36 @@
 @section('script')
     <script>
         $(document).ready(function(){
+            var role_id = @json($role->id);
+            // console.log(role_id);
             $('#edit').click(function(){
                 $('#role').prop('readonly',false);
                 $('.permission').prop('disabled',false);
                 $('.form-group ').prop('disabled',false);
                 $('#submit').prop('disabled',false).removeClass('disabled');
+            });
+
+            {{--$('#delete').on('click',function(){--}}
+            {{--    $.ajax({--}}
+            {{--        url:'{{ route('delete_role')}}',--}}
+            {{--        data:{--}}
+            {{--            id:role_id,--}}
+            {{--        },--}}
+            {{--        success:function(response){--}}
+            {{--        }--}}
+            {{--    });--}}
+            {{--});--}}
+            $('.form-group').on('change', function () {
+                let group_id = $(this).data('group');
+                $('.permission[data-group=' + group_id + ']').prop('checked', $(this).is(':checked'));
+
+            });
+
+            $('.permission').on('change',function(){
+                let group_id = $(this).data('group');
+                let allChecked =$('.permission[data-group="' + group_id + '"]').length ===
+                    $('.permission[data-group="' + group_id + '"]:checked').length;
+                $('.form-group[data-group='+ group_id+']').prop('checked',allChecked);
             });
 
         });

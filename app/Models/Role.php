@@ -4,6 +4,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 class Role extends SpatieRole
@@ -13,7 +14,6 @@ class Role extends SpatieRole
     protected $fillable =
         ['name',
         'guard_name',
-        'description',
         'created_by',
         'updated_by',
         'deleted_by'
@@ -27,4 +27,16 @@ class Role extends SpatieRole
     {
         return $this->belongsToMany(Position::class);
     }
+    protected static function booted()
+    {
+        parent::booted();
+
+        static::deleting(function ($role) {
+            if (Auth::check()) {
+                $role->deleted_by = Auth::id();
+                $role->save();
+            }
+        });
+    }
+
 }

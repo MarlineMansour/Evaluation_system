@@ -6,6 +6,7 @@ use App\Http\Controllers\EvaluationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KpiController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PermissionGroupController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Jobs\CreateEvaluationJob;
@@ -71,16 +72,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/get_all_permissions',[PermissionController::class,'getAll'])->name("get_all_permissions");
     Route::post('/create_permission',[PermissionController::class,'create'])->name('create_permission');
     Route::match(['get','post'],'/update_permission',[PermissionController::class,'update'])->name('update_permission');
-    //delete route
+    Route::get('/delete_permission/{id}',[PermissionController::class,'destroy'])->name('delete_permission');
 
+
+
+    //permission groups
+    Route::get('/get_Permission_groups',[PermissionGroupController::class,'index'])->name('get_Permission_groups');
+    Route::get('/show_permission_groups',[PermissionGroupController::class,'getAll'])->name('show_permission_groups');
+    Route::post('/create_permission_group',[PermissionGroupController::class,'create'])->name('create_permission_group');
 
     //Roles
     Route::get('/get_roles',[RoleController::class,'index'])->name('get_roles');
     Route::get('/get_all_roles',[RoleController::class,'getAll'])->name("get_all_roles");
     Route::get('/show_role/{id}',[RoleController::class,'get'])->name('show_role');
     Route::get('/show_all',[RoleController::class,'showAll'])->name('show_all');
-    Route::post('/create_role',[RoleController::class,'create'])->name('create_role');
+    Route::match(['get','post'],'/create_role',[RoleController::class,'create'])->name('create_role');
     Route::match(['get','post'],'/update_role',[RoleController::class,'update'])->name('update_role');
+    Route::get('/delete_role/{id}',[RoleController::class,'destroy'])->name('delete_role');
 
 });
 

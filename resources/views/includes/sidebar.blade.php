@@ -73,6 +73,7 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class=" bg-primary py-2 collapse-inner rounded "  >
                 <a class="collapse-item text-white" href="{{route('get_permissions')}}">Permissions</a>
+                <a class="collapse-item text-white" href="{{route('get_Permission_groups')}}">Permission Groups</a>
                 <a class="collapse-item text-white" href="{{route('get_roles')}}">Roles</a>
             </div>
         </div>

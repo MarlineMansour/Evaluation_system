@@ -6,12 +6,15 @@
 
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
+                    <p class="mb-3"><a href="{{route('get_permissions')}}" class="text-body"><i
+                                class="fas fa-long-arrow-alt-left text-primary me-2"></i> Back</a></p>
+                    <hr>
                     <div class="row">
                         <div class="col-2">
                             <button class="btn btn-outline-info" id="edit">Edit</button>
                         </div>
                         <div class="col-2">
-                        <button class="btn btn-outline-danger">Delete</button>
+                        <a href="{{route('delete_permission',$permission->id)}}" class="btn btn-outline-danger">Delete</a>
                         </div>
                     </div>
                 </div>
@@ -57,8 +60,8 @@
         <script>
             $(document).ready(function(){
                 $('#edit').click(function(){
-
                     $('#permission').prop('readonly',false);
+                    $('#group').prop('disabled',false);
                     $('#submit').prop('disabled',false).removeClass('disabled');
                 });
             });
